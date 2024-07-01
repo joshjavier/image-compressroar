@@ -1,0 +1,14 @@
+{
+  "name": "image-compressroar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "eleventy",
+    "start": "eleventy --serve --incremental --quiet"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@11ty/eleventy": "3.0.0-alpha.14"
+  }
+}
