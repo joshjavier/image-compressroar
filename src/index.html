@@ -8,6 +8,30 @@
   <script type="module" src="js/main.js"></script>
 </head>
 <body>
-  <h1>Image Compressroar</h1>
+  <div class="container">
+    <h1>Image Compressroar</h1>
+
+    <!-- Single Image Input file -->
+    <div class="inputFileContainer">
+      <label id="imgInputLabel" for="fileInput">Upload/Drag an Image</label>
+      <input type="file" id="fileInput" accept="image/*" title=" " onchange="imageAdded(this)"/>
+    </div>
+
+    <!-- Quality slider adjust -->
+    <p>Quality</p>
+    <div class="sliderContainer">
+      <input type="range" id="qualitySlider" min="0" max="1" step="0.1" onchange="onChangeSliderVal()">
+      <input type="number" id="qualityInput" onchange="onChangeInputVal()" min="0" max="1" step="0.1">
+    </div>
+
+    <br />
+    <button id="compressBtn" onclick="compressImage()">Compress</button><!--Compress button-->
+
+    <br />
+    <a id="downloadLink" download="compressed_image.jpg" style="display: none">Download Compressed Image</a>
+    <p id="errorMSG"></p> <!-- Error message -->
+    <canvas id="canvas" width="320" height="256" style="display: none;"></canvas>
+  </div>
+  <img id="imgPreview" src="" alt="Result preview" style="margin: auto;"><br/>
 </body>
 </html>
