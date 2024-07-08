@@ -1,15 +1,17 @@
 import { qualitySlider } from "./slider.js"
 
+const fileInput = document.getElementById("fileInput")
+const compressBtn = document.getElementById("compressBtn")
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const downloadLink = document.getElementById("downloadLink")
+const imgPreview = document.getElementById("imgPreview")
+const errorMSG = document.getElementById("errorMSG")
+
 export function compressImage()
 {
-  var fileInput = document.getElementById("fileInput");
-  if (fileInput.files.length > 0) 
+  if (fileInput.files.length > 0)
   {
-    var canvas = document.getElementById("canvas");
-    var ctx = canvas.getContext("2d");
-    var downloadLink = document.getElementById("downloadLink");
-    var imgPreview = document.getElementById("imgPreview");
-
     var file = fileInput.files[0];
     var reader = new FileReader();
 
@@ -38,14 +40,12 @@ export function compressImage()
   }
   else {
     // Input is empty.
-    let errorMSG = document.getElementById("errorMSG");
     errorMSG.innerHTML = "Please choose an image first."
   }
 }
 
  //Check if Input has an image
 export function imageAdded(event) {
-  const compressBtn = document.getElementById("compressBtn");
   if (event.target.files.length > 0) {
     document.getElementById("errorMSG").innerHTML = "";
     document.getElementById("imgInputLabel").innerHTML = fileInput.files[0].name;
@@ -64,3 +64,7 @@ export function imageAdded(event) {
 function removeScalePopClass(){
   compressBtn.style.animationName = "";
 }
+
+// Attach event handlers
+compressBtn.addEventListener('click', compressImage)
+fileInput.addEventListener('change', imageAdded)
