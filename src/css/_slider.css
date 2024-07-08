@@ -1,0 +1,17 @@
+.sliderContainer {
+    width: 100%;
+    height: auto;
+}
+
+#qualitySlider {
+    width: 90%;
+    margin: 10px;
+    color: rgb(155, 135, 24);
+}
+
+#qualityInput {
+    font-size: 1.4rem;
+    background-color: transparent;
+    border: 2px solid gold;
+    padding: 5px;
+}

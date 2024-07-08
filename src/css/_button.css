@@ -1,0 +1,11 @@
+#compressBtn {
+    margin: 10px;
+    background: rgb(172, 147, 39);
+    border-radius: 10px;
+    padding: 4px;
+    color: white;
+    cursor: pointer;
+    transition: 0.25s;
+    width: 90%;
+    font-size: 3rem;
+}
