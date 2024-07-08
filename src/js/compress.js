@@ -44,9 +44,9 @@ export function compressImage()
 }
 
  //Check if Input has an image
-export function imageAdded(fileInput) {
+export function imageAdded(event) {
   const compressBtn = document.getElementById("compressBtn");
-  if (fileInput.files.length > 0) {
+  if (event.target.files.length > 0) {
     document.getElementById("errorMSG").innerHTML = "";
     document.getElementById("imgInputLabel").innerHTML = fileInput.files[0].name;
     // Change compress button color to gold

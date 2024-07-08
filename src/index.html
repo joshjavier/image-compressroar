@@ -14,18 +14,18 @@
     <!-- Single Image Input file -->
     <div class="inputFileContainer">
       <label id="imgInputLabel" for="fileInput">Upload/Drag an Image</label>
-      <input type="file" id="fileInput" accept="image/*" title=" " onchange="imageAdded(this)"/>
+      <input type="file" id="fileInput" accept="image/*" />
     </div>
 
     <!-- Quality slider adjust -->
     <p>Quality</p>
     <div class="sliderContainer">
-      <input type="range" id="qualitySlider" min="0" max="1" step="0.1" onchange="onChangeSliderVal()">
-      <input type="number" id="qualityInput" onchange="onChangeInputVal()" min="0" max="1" step="0.1">
+      <input type="range" id="qualitySlider" min="0" max="1" step="0.1">
+      <input type="number" id="qualityInput" min="0" max="1" step="0.1">
     </div>
 
     <br />
-    <button id="compressBtn" onclick="compressImage()">Compress</button><!--Compress button-->
+    <button id="compressBtn">Compress</button><!--Compress button-->
 
     <br />
     <a id="downloadLink" download="compressed_image.jpg" style="display: none">Download Compressed Image</a>

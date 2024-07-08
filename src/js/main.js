@@ -1,8 +1,14 @@
 import {onChangeSliderVal, onChangeInputVal} from "./slider.js"
 import {compressImage, imageAdded} from "./compress.js"
 
-window.compressImage=compressImage;
-window.imageAdded=imageAdded;
+// DOM elements
+const fileInput = document.getElementById("fileInput")
+const qualitySlider = document.getElementById("qualitySlider")
+const qualityInput = document.getElementById("qualityInput")
+const compressBtn = document.getElementById("compressBtn")
 
-window.onChangeSliderVal=onChangeSliderVal;
-window.onChangeInputVal=onChangeInputVal;
+compressBtn.addEventListener('click', compressImage)
+fileInput.addEventListener('change', imageAdded)
+
+qualitySlider.addEventListener('change', onChangeSliderVal)
+qualityInput.addEventListener('change', onChangeInputVal)
