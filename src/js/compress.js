@@ -1,4 +1,4 @@
-import * as qualitySlider from "./slider.js"
+import { qualitySlider } from "./slider.js"
 
 export function compressImage()
 {
@@ -29,7 +29,7 @@ export function compressImage()
             imgPreview.src = url; //Assign src of compress image
           },
           "image/jpeg",
-          Number(qualitySlider.slider.value) // Adjust the compression quality here. Possible values are within 0.0 and 1.0.
+          Number(qualitySlider.value) // Adjust the compression quality here. Possible values are within 0.0 and 1.0.
         );
       };
       img.src = e.target.result;

@@ -1,27 +1,32 @@
-export var slider = document.getElementById("qualitySlider");
-var inputQuality = document.getElementById("qualityInput");
+export const qualitySlider = document.getElementById("qualitySlider")
+export const qualityInput = document.getElementById("qualityInput")
+
 export function onChangeSliderVal(){
-    inputQuality.value = slider.value;
+    qualityInput.value = qualitySlider.value;
 }
 export function onChangeInputVal(){
-    var errorMSG = document.getElementById("errorMSG");
-    if (inputQuality.value >= 0 && inputQuality.value <= 1)
+    // var errorMSG = document.getElementById("errorMSG");
+    if (qualityInput.value >= 0 && qualityInput.value <= 1)
     {
-        slider.value = inputQuality.value;
+        qualitySlider.value = qualityInput.value;
     }
-    else if (inputQuality.value < 0)
+    else if (qualityInput.value < 0)
     {
-        slider.value = 0;
-        inputQuality.value = 0;
+        qualitySlider.value = 0;
+        qualityInput.value = 0;
     }
-    else if (inputQuality.value > 1)
+    else if (qualityInput.value > 1)
     {
-        slider.value = 1;
-        inputQuality.value = 1;
+        qualitySlider.value = 1;
+        qualityInput.value = 1;
     }
-    else 
+    else
     {
         errorMSG.innerHTML = "Invalid Input. Please only input a value of 0 to 1.";
     }
 }
+
+qualitySlider.addEventListener('change', onChangeSliderVal)
+qualityInput.addEventListener('change', onChangeInputVal)
+
 onChangeSliderVal();
