@@ -1,4 +1,4 @@
-import { qualitySlider } from "./slider.js"
+import { qualitySlider } from "./_slider.js"
 
 const fileInput = document.getElementById("fileInput")
 const compressBtn = document.getElementById("compressBtn")

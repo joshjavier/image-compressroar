@@ -1,1 +1,1 @@
-import "./compress.js"
+import "./_compress.js"
