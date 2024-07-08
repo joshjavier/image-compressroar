@@ -1,6 +1,7 @@
 @import "_imgInput.css";
 @import "_button.css";
 @import "_slider.css";
+@import "_image-compare.css";
 
 .container {
     margin: auto;
@@ -11,10 +12,6 @@
 
 #errorMSG, #downloadLink {
     font-size: 1.5rem;
-}
-
-#imgPreview {
-    display: none;
 }
 
 @media only screen and (max-width: 600px){

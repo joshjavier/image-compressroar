@@ -1,0 +1,4 @@
+image-compare {
+  margin-inline: auto;
+  width: var(--image-compare-width);
+}

@@ -1,39 +1,69 @@
 import * as qualitySlider from "./slider.js"
 
+const fileInput = document.getElementById("fileInput");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const downloadLink = document.getElementById("downloadLink");
+const imageCompare = document.querySelector('image-compare');
+
+/**
+ * Loads an image on a slot in the <image-preview> component
+ * @param {HTMLImageElement} img - The image to be loaded
+ * @param {'image-1'|'image-2'} slot - Left and right slots
+ * @param {number|string} quality - Quality of the image between 0.0 and 1.0 (inclusive). If not specified, defaults to 1 (uncompressed)
+ */
+function loadImage(img, slot, quality = 1) {
+  if (typeof quality === 'string') {
+    quality = Number(quality); // Make sure quality is a number
+  }
+
+  // Set canvas size to the image original size to ensure enough space for the image
+  canvas.width = img.width;
+  canvas.height = img.height;
+  // Draw the image onto the canvas without resizing
+  ctx.drawImage(img, 0, 0);
+
+  canvas.toBlob(
+    function (blob) {
+      let img = imageCompare.querySelector(`[slot="${slot}"]`);
+      let url = URL.createObjectURL(blob);
+
+      if (quality !== 1) {
+        downloadLink.href = url; // Display the download link for the compressed image
+      }
+
+      img.onload = () => URL.revokeObjectURL(url);
+      img.src = url;
+    },
+    "image/jpeg",
+    quality
+  );
+}
+
 export function compressImage()
 {
-  var fileInput = document.getElementById("fileInput");
-  if (fileInput.files.length > 0) 
+  if (fileInput.files.length > 0)
   {
-    var canvas = document.getElementById("canvas");
-    var ctx = canvas.getContext("2d");
-    var downloadLink = document.getElementById("downloadLink");
-    var imgPreview = document.getElementById("imgPreview");
-
-    var file = fileInput.files[0];
-    var reader = new FileReader();
+    let file = fileInput.files[0];
+    let reader = new FileReader();
 
     reader.onload = function (e) {
-      var img = new Image();
-      img.onload = function () {
-        canvas.width = img.width; // Set canvas size to the image original size to ensure enough space for the image
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0); // Draw the image onto the canvas without resizing
+      const dataUrl = e.target.result
 
-        canvas.toBlob(
-          function (blob) {
-            var url = URL.createObjectURL(blob);
-            downloadLink.href = url;
-            downloadLink.style.display = "block"; //Enable download link for the compressed image.
-            imgPreview.style.display = "block"; //Enable image element
-            imgPreview.src = url; //Assign src of compress image
-          },
-          "image/jpeg",
-          Number(qualitySlider.slider.value) // Adjust the compression quality here. Possible values are within 0.0 and 1.0.
-        );
-      };
-      img.src = e.target.result;
+      let img = new Image();
+      img.onload = event => {
+        const img = event.target
+
+        // Make <image-compare> the same width as the image
+        imageCompare.style.setProperty('--image-compare-width', `${img.width}px`);
+
+        // Load the original and compressed versions of the image
+        loadImage(img, 'image-1')
+        loadImage(img, 'image-2', qualitySlider.slider.value)
+      }
+      img.src = dataUrl;
     };
+
     reader.readAsDataURL(file);
   }
   else {

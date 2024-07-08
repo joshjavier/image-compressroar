@@ -28,10 +28,15 @@
     <button id="compressBtn" onclick="compressImage()">Compress</button><!--Compress button-->
 
     <br />
-    <a id="downloadLink" download="compressed_image.jpg" style="display: none">Download Compressed Image</a>
+    <a id="downloadLink" download="compressed_image.jpg">Download Compressed Image</a>
     <p id="errorMSG"></p> <!-- Error message -->
     <canvas id="canvas" width="320" height="256" style="display: none;"></canvas>
   </div>
-  <img id="imgPreview" src="" alt="Result preview" style="margin: auto;"><br/>
+
+  <!-- Image Compare Component -->
+   <image-compare>
+    <img slot="image-1" alt="">
+    <img slot="image-2" alt="">
+   </image-compare>
 </body>
 </html>
