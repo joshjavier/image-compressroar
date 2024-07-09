@@ -6,6 +6,9 @@ const ctx = canvas.getContext("2d");
 const downloadLink = document.getElementById("downloadLink");
 const imageCompare = document.querySelector('image-compare');
 
+/** @type {string} url - The object URL of the compressed image */
+let url
+
 /**
  * Loads an image on a slot in the <image-preview> component
  * @param {HTMLImageElement} img - The image to be loaded
@@ -17,6 +20,13 @@ function loadImage(img, slot, quality = 1) {
     quality = Number(quality); // Make sure quality is a number
   }
 
+  let imgEl = imageCompare.querySelector(`[slot="${slot}"]`);
+
+  if (quality === 1) {
+    imgEl.src = img.src; // Display the original image on the DOM
+    return;
+  }
+
   // Set canvas size to the image original size to ensure enough space for the image
   canvas.width = img.width;
   canvas.height = img.height;
@@ -25,15 +35,10 @@ function loadImage(img, slot, quality = 1) {
 
   canvas.toBlob(
     function (blob) {
-      let img = imageCompare.querySelector(`[slot="${slot}"]`);
-      let url = URL.createObjectURL(blob);
-
-      if (quality !== 1) {
-        downloadLink.href = url; // Display the download link for the compressed image
-      }
-
-      img.onload = () => URL.revokeObjectURL(url);
-      img.src = url;
+      URL.revokeObjectURL(url);        // Clear existing object URL from memory
+      url = URL.createObjectURL(blob); // Save the object URL of the new compressed image
+      imgEl.src = url;                 // Display the compressed image on the DOM
+      downloadLink.href = url;         // Update the download link for the compressed image
     },
     "image/jpeg",
     quality
