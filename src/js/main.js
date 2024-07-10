@@ -1,3 +1,4 @@
+import '@cloudfour/image-compare'
 import {onChangeSliderVal, onChangeInputVal} from "./slider.js"
 import {compressImage, imageAdded} from "./compress.js"
 

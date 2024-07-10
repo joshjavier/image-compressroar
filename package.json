@@ -18,5 +18,8 @@
     "last 2 versions",
     "not dead",
     "> 0.2%"
-  ]
+  ],
+  "dependencies": {
+    "@cloudfour/image-compare": "^1.0.5"
+  }
 }
