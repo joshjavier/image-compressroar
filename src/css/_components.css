@@ -2,6 +2,7 @@
 @import "_button.css";
 @import "_slider.css";
 @import "_image-compare.css";
+@import "_carousel.css";
 
 .container {
     margin: auto;

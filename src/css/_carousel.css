@@ -1,0 +1,21 @@
+.carousel {
+  width: 100%;
+  height: auto;
+  padding: 10px;
+  display: inline;
+}
+
+.card-container {
+  width: inherit;
+}
+
+.card {
+  width: 128px;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.card:hover {
+  background: #e9e9e9;
+}
