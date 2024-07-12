@@ -13,13 +13,13 @@ function initialQualityVal(){
 initialQualityVal();
 
 // On change value for quality slider
-slider.addEventListener("click", function(){
+slider.addEventListener("change", function(){
     inputQuality.value = slider.value;
     compressImage();
 });
 
 // On change value for the quality number input
-inputQuality.addEventListener("click", function(){
+inputQuality.addEventListener("change", function(){
     const errorMSG = document.getElementById("errorMSG");
     if (inputQuality.value >= 0 && inputQuality.value <= 1)
     {
