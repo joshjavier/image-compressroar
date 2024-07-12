@@ -20,6 +20,8 @@
     "> 0.2%"
   ],
   "dependencies": {
-    "@cloudfour/image-compare": "^1.0.5"
+    "@cloudfour/image-compare": "^1.0.5",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1"
   }
 }

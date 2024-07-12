@@ -11,11 +11,10 @@
 #imgInputLabel {
     width: 100%;
     height: 100%;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     position: absolute;
-    top: 0%;
-    left: 50%;
-    transform: translate(-50%,40%);
+    top: 45%;
+    left: 1%;
 }
 
 #fileInput {
