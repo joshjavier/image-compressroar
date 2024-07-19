@@ -1,0 +1,10 @@
+<svg width="104" height="104" viewBox="0 0 104 104" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M84 33.3333C91.3638 33.3333 97.3333 27.3638 97.3333 20C97.3333 12.6362 91.3638 6.66663 84 6.66663C76.6362 6.66663 70.6666 12.6362 70.6666 20C70.6666 27.3638 76.6362 33.3333 84 33.3333Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M84 14.6666V25.3333" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M78.6666 20H89.3333" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M89.5 39.2342V83.1667C89.5 88.8736 84.8736 93.5 79.1667 93.5H20.8333C15.1264 93.5 10.5 88.8736 10.5 83.1667V24.8333C10.5 19.1264 15.1264 14.5 20.8333 14.5H64.7658C64.399 15.7852 64.1575 17.1232 64.0554 18.5H20.8333C17.3355 18.5 14.5 21.3355 14.5 24.8333V83.1667C14.5 86.6645 17.3355 89.5 20.8333 89.5H79.1667C82.6645 89.5 85.5 86.6645 85.5 83.1667V39.9446C86.8768 39.8425 88.2148 39.601 89.5 39.2342Z" fill="currentColor"/>
+  <path d="M35.4166 45.6666C38.8684 45.6666 41.6666 42.8684 41.6666 39.4166C41.6666 35.9648 38.8684 33.1666 35.4166 33.1666C31.9648 33.1666 29.1666 35.9648 29.1666 39.4166C29.1666 42.8684 31.9648 45.6666 35.4166 45.6666Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M87.5 66.5L66.6667 45.6666L20.8334 91.5" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<p>Drag and drop your images here</p>
+<p>Or, browse to select</p>

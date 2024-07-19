@@ -1,0 +1,40 @@
+<div class="thumbnail">
+  <slot name="thumbnail"></slot>
+</div>
+<div class="text">
+  <h3 class="filename">
+    <slot name="filename">ATL_MS_1453462_MPP-1080x486.jpg</slot>
+  </h3>
+  <div class="sizes">
+    <p class="compressed">Size: <strong><slot name="compressed">98.72 KB</slot></strong></p>
+    <p class="original">Original: <slot name="original">203.76 KB</slot></p>
+  </div>
+</div>
+
+<style>
+  image-card {
+    display: flex;
+    border: 1px solid red;
+
+    & .thumbnail {
+      aspect-ratio: 1;
+      border: 1px solid red;
+      width: 84px;
+      height: 84px;
+    }
+  }
+</style>
+
+<script>
+  class ImageCard extends HTMLElement {
+    // required prop is the image blob, where we can derive the image url, and original and compressed size.
+    // this component will also keep track of the quality, which can be adjusted by the <quality-slider>
+    connectedCallback() {
+      console.log('<image-card> mounted')
+    }
+  }
+
+  if (!customElements.get('image-card')) {
+    customElements.define('image-card', ImageCard)
+  }
+</script>
