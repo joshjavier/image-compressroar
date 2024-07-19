@@ -4,6 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Compressroar</title>
+
+    <!-- inline bundles -->
+    <style @raw="getBundle('css')" webc:keep></style>
+    <script @raw="getBundle('js')" webc:keep></script>
+
+    <!-- external scripts and stylesheets -->
     <link rel="stylesheet" href="css/main.css" webc:keep>
     <script type="module" src="js/main.js" webc:keep></script>
   </head>
