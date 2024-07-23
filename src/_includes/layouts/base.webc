@@ -10,8 +10,8 @@
     <script @raw="getBundle('js')" webc:keep></script>
 
     <!-- external scripts and stylesheets -->
-    <link rel="stylesheet" href="css/main.css" webc:keep>
-    <script type="module" src="js/main.js" webc:keep></script>
+    <link rel="stylesheet" href="/css/main.css" webc:keep>
+    <script type="module" src="/js/main.js" webc:keep></script>
   </head>
   <body @raw="content"></body>
 </html>
