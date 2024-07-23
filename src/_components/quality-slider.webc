@@ -1,0 +1,85 @@
+<label for="quality">Quality</label>
+<div class="range-slider">
+  <input type="range" id="quality" min="0" max="1" step="0.01">
+  <div class="slider" aria-hidden="true">
+    <div class="thumb"></div>
+  </div>
+</div>
+
+<!-- References:
+- https://www.tpgi.com/evolving-custom-sliders/
+- https://www.a11ywithlindsey.com/blog/creating-accessible-range-slider-css
+- https://www.uinkits.com/components/slider-ui-element
+- https://rsms.me/inter/#glyphs (slider for optical size)
+-->
+
+<style>
+  :root {
+      --slider-border: 2px;
+      --slider-height: 2rem;
+      --slider-max-width: 100%;
+      --slider-width: 20rem;
+      --thumb-margin: 0.2rem;
+      --thumb-size: calc(var(--slider-height) - (2 * var(--thumb-margin)));
+  }
+
+  .range-slider {
+    max-width: var(--slider-max-width);
+    width: var(--slider-width, 20rem);
+    height: var(--slider-height, 2rem);
+    position: relative;
+
+    > .slider {
+      border: var(--slider-border) solid;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+
+      > .thumb {
+        /* border: 1px solid red; */
+        height: 100%;
+        width: 100%;
+        position: absolute;
+
+        &::before {
+          content: '';
+          border: 2px solid;
+          display: block;
+          /* margin: var(--thumb-margin, 0.2rem); */
+          height: var(--thumb-size);
+          width: var(--thumb-size);
+        }
+      }
+    }
+
+    /* Translate hover/focus styles to the custom slider */
+    > input[type="range"]:focus-visible + .slider {
+      outline: var(--fluid-6-9) double black;
+      box-shadow: 0 0 0 var(--fluid-4-6) white;
+    }
+
+    > input[type="range"]:disabled + .slider {
+      opacity: 0.3;
+    }
+
+    /* Visually hide the native range input */
+    > input[type="range"] {
+      -webkit-appearance: none;
+      margin: var(--slider-border);
+      opacity: 0;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      z-index: 2;
+    }
+  }
+</style>
+
+<script>
+  class QualitySlider extends HTMLElement {}
+
+  if (!customElements.get('quality-slider')) {
+    customElements.define('quality-slider', QualitySlider)
+  }
+</script>
