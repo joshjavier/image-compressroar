@@ -1,4 +1,4 @@
-<svg width="104" height="104" viewBox="0 0 104 104" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="104" height="104" viewBox="0 0 104 104" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <path d="M84 33.3333C91.3638 33.3333 97.3333 27.3638 97.3333 20C97.3333 12.6362 91.3638 6.66663 84 6.66663C76.6362 6.66663 70.6666 12.6362 70.6666 20C70.6666 27.3638 76.6362 33.3333 84 33.3333Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M84 14.6666V25.3333" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M78.6666 20H89.3333" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -6,5 +6,94 @@
   <path d="M35.4166 45.6666C38.8684 45.6666 41.6666 42.8684 41.6666 39.4166C41.6666 35.9648 38.8684 33.1666 35.4166 33.1666C31.9648 33.1666 29.1666 35.9648 29.1666 39.4166C29.1666 42.8684 31.9648 45.6666 35.4166 45.6666Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M87.5 66.5L66.6667 45.6666L20.8334 91.5" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
-<p>Drag and drop your images here</p>
-<p>Or, browse to select</p>
+<p class="primary-label">Drag and drop your images here</p>
+<p class="secondary-label">
+  Or,
+  <label class="filepicker">
+    <span>browse to select</span>
+    <input
+      type="file"
+      id="filepicker"
+      accept="image/*"
+      multiple
+    >
+  </label>
+</p>
+
+<style>
+  drop-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 300px;
+    border-radius: var(--space-3xs);
+    background-color: var(--dropzone-bg, var(--color-light-mod-1));
+    position: relative;
+    text-align: center;
+    box-shadow: inset 0 4px 4px hsl(0 0% 0% / 15%),
+      0 2px 0 hsl(0 0% 100% / 15%);
+
+    & * { margin: 0; }
+
+    & .primary-label {
+      font-weight: 700;
+      font-size: var(--step-3);
+      width: 15ch;
+      line-height: normal;
+    }
+
+    & .filepicker {
+      position: relative;
+      cursor: pointer;
+
+      & span {
+        text-decoration: underline;
+        color: var(--color-primary);
+
+        label:hover & {
+          text-decoration: none;
+        }
+      }
+
+      /* Show focus indicator on label on input focus */
+      &:focus-within {
+        outline: var(--fluid-6-9) double black;
+        box-shadow: 0 0 0 var(--fluid-4-6) white;
+      }
+
+      /* Hide the native input element */
+      & input[type="file"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        z-index: -1;
+      }
+    }
+
+    &[data-drag]::after {
+      content: '';
+      position: absolute;
+      top: 0.5rem;
+      left: 0.5rem;
+      width: calc(100% - 1rem);
+      height: calc(100% - 1rem);
+      background-color: #eb5e2833;
+      border: 2px dashed var(--color-primary);
+      border-radius: var(--fluid-2-4);
+      pointer-events: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * The drop zone adds images to the image queue, whic is then used by the
+   * <image-queue> component to render the <image-card>s that represent the
+   * images to be compressed.
+   */
+</script>
