@@ -3,6 +3,30 @@
 
 :root {
   /*
+    Colors
+  */
+
+  --color-light: #ffffff;
+  --color-light-mod-1: #ebebeb;
+  --color-light-mod-2: #c4c4c4;
+  --color-dark: #393939;
+  --color-dark-mod-1: #4d4d4d;
+  --color-dark-mod-2: #747474;
+
+  --color-primary: #eb5e28;
+  --color-primary-tint: #fce7df;
+  --color-primary-shade: #804832;
+
+  --color-info: #0683db;
+  --color-info-tint: #daecfa;
+  --color-positive: #0ca626;
+  --color-positive-tint: #dbf2df;
+  --color-caution: #ef7015;
+  --color-caution-tint: #fdeadc;
+  --color-negative: #f04150;
+  --color-negative-tint: #fde2e5;
+
+  /*
     Typography
   */
 
@@ -106,6 +130,8 @@ body {
   font-variation-settings:
     'wdth' 50,  /* thinner characters */
     'YTLC' 540; /* increase x-height */
+  background-color: var(--color-sheet, var(--color-light));
+  color: var(--color-text, var(--color-dark));
 }
 
 :where(p, h1, h2, h3, h4, h5, h6, li) {
