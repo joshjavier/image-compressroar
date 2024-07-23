@@ -1,31 +1,92 @@
-<div class="thumbnail">
-  <slot name="thumbnail"></slot>
-</div>
-<div class="text">
-  <h3 class="filename">
-    <slot name="filename">ATL_MS_1453462_MPP-1080x486.jpg</slot>
-  </h3>
-  <div class="sizes">
-    <p class="compressed">Size: <strong><slot name="compressed">98.72 KB</slot></strong></p>
-    <p class="original">Original: <slot name="original">203.76 KB</slot></p>
+<template webc:root tabindex="0">
+  <div class="thumbnail">
+    <slot name="thumbnail"></slot>
   </div>
-</div>
+  <div class="text">
+    <h3 class="filename">
+      <slot name="filename">ATL_MS_1453462_MPP-1080x486.jpg</slot>
+    </h3>
+    <div class="details">
+      <div class="sizes">
+        <p class="compressed">Size: <strong><slot name="compressed">98.72 KB</slot></strong></p>
+        <p class="original">Original: <slot name="original">203.76 KB</slot></p>
+      </div>
+      <svg class="icon icon-success"><use href="#check-solid" /></svg>
+      <svg class="icon icon-failure"><use href="#cross-solid" /></svg>
+    </div>
+  </div>
+</template>
 
 <style>
   image-card {
     display: flex;
-    border: 1px solid red;
+    gap: var(--space-xs);
+    padding: var(--space-2xs);
+    padding-right: var(--space-xs);
+    border-radius: var(--space-xs);
+    width: 500px;
+
+    & * { margin: 0; }
 
     & .thumbnail {
       aspect-ratio: 1;
       border: 1px solid red;
       width: 84px;
       height: 84px;
+      border-radius: var(--space-3xs);
     }
+
+    & .text {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-2xs, 1rem);
+
+      & .filename {
+        font-size: var(--step-0);
+        font-weight: 400;
+      }
+
+      & .details {
+        font-size: var(--step--2);
+        display: flex;
+        align-items: center;
+        gap: var(--space-s, 1rem);
+        justify-content: space-between;
+      }
+    }
+
+    /* Validation icons */
+    &[aria-invalid] .icon-success {
+      display: none;
+    }
+    &:not([aria-invalid]) .icon-failure {
+      display: none;
+    }
+
+    /* States */
+    &:hover {
+      background-color: var(--color-light-mod-1);
+    }
+    /* TODO: active state */
   }
 </style>
 
 <script>
+  /**
+   * The <image-card> component has the following attributes:
+   * - blob
+   *   - derive sizes, file format
+   * - quality (default 0.5)
+   * - filename
+   *
+   * <image-card
+   *   quality="0.5"
+   *   blob="randomstringofcharacters"
+   *   filename="ATL_MS_1453462_MPP-1080x486.jpg"
+   * ></image-card>
+   */
   class ImageCard extends HTMLElement {
     // required prop is the image blob, where we can derive the image url, and original and compressed size.
     // this component will also keep track of the quality, which can be adjusted by the <quality-slider>

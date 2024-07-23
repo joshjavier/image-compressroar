@@ -13,5 +13,19 @@
     <link rel="stylesheet" href="/css/main.css" webc:keep>
     <script type="module" src="/js/main.js" webc:keep></script>
   </head>
-  <body @raw="content"></body>
+  <body>
+    <!-- SVG Sprite -->
+    <svg>
+      <symbol id="check-solid" width="24" height="24" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="12" fill="currentColor" />
+        <path d="M6.6665 12.2353L10.4312 16L17.9998 8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </symbol>
+      <symbol id="cross-solid" width="24" height="24" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="12" fill="currentColor" />
+        <path d="M16.6668 7.33337L7.3335 16.6667M7.3335 7.33337L16.6668 16.6667" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </symbol>
+    </svg>
+
+    <template @raw="content" webc:nokeep></template>
+  </body>
 </html>
