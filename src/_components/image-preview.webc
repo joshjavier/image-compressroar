@@ -1,0 +1,17 @@
+<script>
+  /**
+   * The <image-preview> component will render the selected image card,
+   * either as an <image-compare> slider or as the compressed version, with
+   * users having the ability to click-and-hold the image to preview the
+   * original version.
+   *
+   * This component also auto-updates as the value of the <quality-slider>
+   * changes, allowing users to see the effects of changing the quality of
+   * an image in real time.
+   */
+  class ImagePreview extends HTMLElement {}
+
+  if (!customElements.get('image-preview')) {
+    customElements.define('image-preview', ImagePreview)
+  }
+</script>
