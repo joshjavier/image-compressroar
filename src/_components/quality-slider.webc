@@ -6,49 +6,52 @@
   </div>
 </div>
 
-<!-- References:
+<!--- References:
 - https://www.tpgi.com/evolving-custom-sliders/
 - https://www.a11ywithlindsey.com/blog/creating-accessible-range-slider-css
 - https://www.uinkits.com/components/slider-ui-element
 - https://rsms.me/inter/#glyphs (slider for optical size)
--->
+--->
 
 <style>
-  :root {
-      --slider-border: 2px;
-      --slider-height: 2rem;
-      --slider-max-width: 100%;
-      --slider-width: 20rem;
-      --thumb-margin: 0.2rem;
-      --thumb-size: calc(var(--slider-height) - (2 * var(--thumb-margin)));
-  }
-
   .range-slider {
-    max-width: var(--slider-max-width);
+    max-width: var(--slider-max-width, 100%);
     width: var(--slider-width, 20rem);
-    height: var(--slider-height, 2rem);
+    height: var(--slider-height, var(--space-l, 2rem));
     position: relative;
 
     > .slider {
-      border: var(--slider-border) solid;
-      position: relative;
-      width: 100%;
       height: 100%;
-      z-index: 1;
+      border-radius: var(--space-2xs);
+
+      /* slider track */
+      &::before {
+        content: '';
+        border: 1px solid transparent;
+        background-color: var(--color-dark, #000);
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        height: var(--space-3xs);
+        border-radius: 9999em;
+      }
 
       > .thumb {
-        /* border: 1px solid red; */
         height: 100%;
-        width: 100%;
+        aspect-ratio: 1;
         position: absolute;
 
         &::before {
           content: '';
-          border: 2px solid;
+          border: 2px solid var(--color-dark);
+          /* outline: var(--space-3xs) solid var(--color-light); */
+          background-color: var(--color-primary);
+          border-radius: var(--space-2xs);
           display: block;
-          /* margin: var(--thumb-margin, 0.2rem); */
-          height: var(--thumb-size);
-          width: var(--thumb-size);
+          margin: var(--thumb-margin);
+          height: var(--thumb-size, calc(100% - 2 * var(--thumb-margin, 0px)));
+          width: var(--thumb-size, calc(100% - 2 * var(--thumb-margin, 0px)));
         }
       }
     }
@@ -66,18 +69,90 @@
     /* Visually hide the native range input */
     > input[type="range"] {
       -webkit-appearance: none;
-      margin: var(--slider-border);
+      margin: 0;
       opacity: 0;
       position: absolute;
       height: 100%;
       width: 100%;
-      z-index: 2;
+      z-index: 1;
+
+      /* Make sure the custom thumb is aligned with the native
+         range input thumb for screen reader focus indicators */
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: var(--slider-height, var(--space-l, 2rem));
+        width: var(--slider-height, var(--space-l, 2rem));
+      }
+
+      &::-moz-range-thumb {
+        box-sizing: border-box;
+        height: var(--slider-height, var(--space-l, 2rem));
+        width: var(--slider-height, var(--space-l, 2rem));
+      }
     }
   }
 </style>
 
-<script>
-  class QualitySlider extends HTMLElement {}
+<script webc:bucket="defer">
+  class QualitySlider extends HTMLElement {
+    connectedCallback() {
+      this.dom = {
+        range: this.querySelector('input[type="range"]'),
+        slider: this.querySelector('.slider'),
+        thumb: this.querySelector('.thumb'),
+      }
+
+      for (const type of ['input', 'change']) {
+        this.dom.range.addEventListener(type, (e) => {
+          this.updateSlider()
+          this.value = e.target.value
+        })
+      }
+
+      if (this.value) {
+        this.dom.range.value = this.value
+        this.updateSlider()
+      } else {
+        this.value = 0.5 // Set default starting value
+      }
+    }
+
+    // Reflection
+    set value(val) {
+      this.setAttribute('value', val)
+    }
+    get value() {
+      return this.getAttribute('value')
+    }
+
+    // Watch for attribute changes
+    static get observedAttributes() {
+      return ['value']
+    }
+    attributeChangedCallback(name, oldVal, newVal) {
+      if (!this.dom) return
+      switch (name) {
+        case 'value':
+          if (oldVal === newVal) return
+          this.dom.range.value = newVal
+          this.updateSlider()
+          break
+      }
+    }
+
+    updateSlider() {
+      const distance = this.dom.range.value / this.dom.range.max
+      const offset = (this.dom.thumb.offsetWidth / this.dom.slider.offsetWidth) * distance
+      const position = ((distance - offset) * 100).toFixed(1)
+
+      this.dom.thumb.style.insetInlineStart = position + '%'
+
+      const supportsInsetInlineStart = 'insetInlineStart' in document.documentElement.style
+      if (!supportsInsetInlineStart) {
+        this.dom.thumb.style.left = position + '%'
+      }
+    }
+  }
 
   if (!customElements.get('quality-slider')) {
     customElements.define('quality-slider', QualitySlider)
