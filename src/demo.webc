@@ -1,0 +1,19 @@
+---
+layout: 'layouts/base.webc'
+---
+<h1>Components Demo</h1>
+
+<drop-zone></drop-zone>
+
+<image-card>
+  <span slot="filename">test_image.jpg</span>
+</image-card>
+
+<image-preview>
+  <image-compare>
+    <img slot="image-1" src="/SvMdrt9aT5-800.jpeg" alt="">
+    <img slot="image-2" src="/SvMdrt9aT5-800.jpeg" alt="">
+  </image-compare>
+</image-preview>
+
+<quality-slider value="0.3"></quality-slider>
