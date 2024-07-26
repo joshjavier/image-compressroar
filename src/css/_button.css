@@ -9,3 +9,30 @@
     width: 90%;
     font-size: 3rem;
 }
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.btn {
+  font-size: 1.5rem;
+  border-radius: 6px;
+  padding: 0.6rem 2rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+
+  &.clear {
+    display: none;
+    color: crimson;
+    border-color: currentColor;
+    background-color: white;
+  }
+
+  &.download {
+    color: white;
+    font-weight: 700;
+    background-color: seagreen;
+  }
+}

@@ -5,6 +5,8 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const imageCompare = document.querySelector('image-compare');
 const downloadLink = document.getElementById("downloadLink");
+const clearBtn = document.querySelector('button.clear')
+const cardContainer = document.getElementById("card-container")
 
 var JSZip = require("jszip");
 
@@ -54,6 +56,7 @@ export function compressImage()
 {
   if (fileInput.files.length > 0)
   {
+    clearBtn.style.display = 'inline-block'
     fullQualImgs = [];                                        //Remove all array items
     document.getElementById("card-container").innerHTML = ''; //Remove child elements
 
@@ -89,8 +92,13 @@ export function compressImage()
 }
 
  //Check all images that are added.
- fileInput.addEventListener("change", function() {
+function updateInputDOM() {
   const imgInputLabel = document.getElementById("imgInputLabel");
+
+  if (fileInput.files.length === 0) {
+    imgInputLabel.textContent = 'Upload/Drag an Image'
+    imgInputLabel.removeAttribute('style')
+  }
 
   if (fileInput.files.length > 0) {
     document.getElementById("errorMSG").innerHTML = "";
@@ -113,7 +121,7 @@ export function compressImage()
     compressImage();                        //Start compressing
     downloadLink.style.display = "inline"; //Display download button
   }
-});
+}
 
 //Download multiple image URLs
 downloadLink.addEventListener("click", function() {
@@ -138,7 +146,6 @@ downloadLink.addEventListener("click", function() {
 });
 
 function addImageCarousel(u){
-  let cardContainer = document.getElementById("card-container");
   let card = document.createElement("button"); //Create button element
   let newImg = document.createElement("img"); //Create image element
   let imgUrl = URL.createObjectURL(u);
@@ -156,3 +163,20 @@ function addImageCarousel(u){
     document.querySelector(`[slot="image-2"]`).src = imgUrl;
   };
 }
+
+fileInput.addEventListener('change', updateInputDOM)
+
+clearBtn.addEventListener('click', () => {
+  // Reset file input
+  fileInput.value = null
+  updateInputDOM()
+
+  // Hide buttons
+  clearBtn.style.display = 'none'
+  downloadLink.style.display = 'none'
+
+  // Clear carousel and image preview
+  cardContainer.innerHTML = ''
+  imageCompare.firstElementChild.removeAttribute('src')
+  imageCompare.lastElementChild.removeAttribute('src')
+})
