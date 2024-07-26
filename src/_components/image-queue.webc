@@ -1,0 +1,12 @@
+<script webc:bucket="defer">
+  class ImageQueue extends HTMLElement {
+    constructor() {
+      super()
+      this.images = []
+    }
+  }
+
+  if (!customElements.get('image-queue')) {
+    customElements.define('image-queue', ImageQueue)
+  }
+</script>

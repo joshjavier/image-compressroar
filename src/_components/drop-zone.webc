@@ -13,7 +13,6 @@
     <span>browse to select</span>
     <input
       type="file"
-      id="filepicker"
       accept="image/*"
       multiple
     >
@@ -75,7 +74,7 @@
       }
     }
 
-    &[data-drag]::after {
+    &.highlight::after {
       content: '';
       position: absolute;
       top: 0.5rem;
@@ -90,10 +89,59 @@
   }
 </style>
 
-<script>
+<script webc:bucket="defer">
   /**
    * The drop zone adds images to the image queue, whic is then used by the
    * <image-queue> component to render the <image-card>s that represent the
    * images to be compressed.
    */
+
+  class DropZone extends HTMLElement {
+    connectedCallback() {
+      this.dom = {
+        input: this.querySelector('input[type="file"]'),
+        queue: document.querySelector(`#${this.getAttribute('for')}`),
+      }
+
+      // Add files to queue via file picker
+      this.dom.input.addEventListener('change', () => {
+        const fileList = this.dom.input.files
+        this.dom.queue.images = this.dom.queue.images.concat(Array.from(fileList))
+        console.log(this.dom.queue.images)
+      })
+
+      // Add files to queue via drag-and-drop
+      document.addEventListener('dragover', (e) => {
+        e.preventDefault() // allows drop event to fire
+        if (this.contains(e.target)) {
+          e.dataTransfer.dropEffect = 'copy'
+          this.classList.add('highlight')
+        } else {
+          e.dataTransfer.dropEffect = 'none'
+        }
+      })
+
+      this.addEventListener('dragleave', (e) => {
+        if (this.contains(e.relatedTarget)) {
+          return // only remove highlight when dragging outside of the dropzone
+        }
+        this.classList.remove('highlight')
+      })
+
+      document.addEventListener('drop', (e) => {
+        e.preventDefault() // don't open dragged items as link
+        if (this.contains(e.target)) {
+          this.classList.remove('highlight')
+
+          const fileList = e.dataTransfer.files
+          this.dom.queue.images = this.dom.queue.images.concat(Array.from(fileList))
+          console.log(this.dom.queue.images)
+        }
+      })
+    }
+  }
+
+  if (!customElements.get('drop-zone')) {
+    customElements.define('drop-zone', DropZone)
+  }
 </script>
