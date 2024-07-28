@@ -3,10 +3,12 @@ layout: 'layouts/base.webc'
 ---
 <h1>Components Demo</h1>
 
-<drop-zone></drop-zone>
+<drop-zone for="images"></drop-zone>
+<image-queue id="images"></image-queue>
 
 <image-card>
-  <span slot="filename">test_image.jpg</span>
+  <!-- <img slot="thumbnail" src="/SvMdrt9aT5-800.jpeg" alt=""> -->
+  <!-- <span slot="filename">test_image.jpg</span> -->
 </image-card>
 
 <image-preview>

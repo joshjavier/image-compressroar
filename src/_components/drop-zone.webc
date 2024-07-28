@@ -107,7 +107,7 @@
       this.dom.input.addEventListener('change', () => {
         const fileList = this.dom.input.files
         this.dom.queue.images = this.dom.queue.images.concat(Array.from(fileList))
-        console.log(this.dom.queue.images)
+        this.dom.queue.render()
       })
 
       // Add files to queue via drag-and-drop
@@ -135,7 +135,7 @@
 
           const fileList = e.dataTransfer.files
           this.dom.queue.images = this.dom.queue.images.concat(Array.from(fileList))
-          console.log(this.dom.queue.images)
+          this.dom.queue.render()
         }
       })
     }

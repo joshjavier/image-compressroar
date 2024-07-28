@@ -12,3 +12,4 @@ export function returnFileSize(number) {
     return `${(number / 1e6).toFixed(2)} MB`
   }
 }
+

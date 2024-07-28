@@ -4,6 +4,14 @@
       super()
       this.images = []
     }
+
+    render() {
+      this.images.forEach(image => {
+        console.log(image.name, image.size)
+        let ic = new ImageCard(image)
+        this.appendChild(ic)
+      });
+    }
   }
 
   if (!customElements.get('image-queue')) {
