@@ -21,6 +21,7 @@
       aspect-ratio: 1;
       width: 84px;
       border-radius: var(--space-3xs);
+      flex-shrink: 0;
 
       &:empty { background-color: var(--color-primary); }
 
@@ -103,6 +104,7 @@
           url: null,
         },
       }
+      console.log(this.data.file)
     }
 
     connectedCallback() {
@@ -178,6 +180,7 @@
         type: this.data.file.type,
         quality: this.quality,
       })
+      console.log(this.data.compressed.blob)
 
       this.data.compressed.url = URL.createObjectURL(this.data.compressed.blob)
       document.querySelector('[slot="image-2"]').src = this.data.compressed.url

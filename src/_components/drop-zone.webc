@@ -104,13 +104,12 @@
       }
 
       // Add files to queue via file picker
-      this.dom.input.addEventListener('change', () => {
-        const fileList = this.dom.input.files
-        this.dom.queue.images = this.dom.queue.images.concat(Array.from(fileList))
-        this.dom.queue.render()
-      })
+      this.dom.input.addEventListener('change', this)
 
       // Add files to queue via drag-and-drop
+      document.addEventListener('drop', this)
+
+      // Dragover effects
       document.addEventListener('dragover', (e) => {
         e.preventDefault() // allows drop event to fire
         if (this.contains(e.target)) {
@@ -127,16 +126,28 @@
         }
         this.classList.remove('highlight')
       })
+    }
 
-      document.addEventListener('drop', (e) => {
+    /**
+     * @param {Event|InputEvent} e - The event fired when user adds files via file picker or drag-and-drop
+     */
+    handleEvent(e) {
+      let fileList
+
+      if (e.type === 'drop') {
         e.preventDefault() // don't open dragged items as link
-        if (this.contains(e.target)) {
-          this.classList.remove('highlight')
+        if (!this.contains(e.target)) return
+        fileList = e.dataTransfer.files
+        this.classList.remove('highlight')
+      }
 
-          const fileList = e.dataTransfer.files
-          this.dom.queue.images = this.dom.queue.images.concat(Array.from(fileList))
-          this.dom.queue.render()
-        }
+      if (e.type === 'change') {
+        fileList = this.dom.input.files
+      }
+
+      Array.from(fileList).forEach(file => {
+        const imagecard = new ImageCard(file)
+        this.dom.queue.appendChild(imagecard)
       })
     }
   }
