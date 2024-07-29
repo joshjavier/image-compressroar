@@ -13,7 +13,7 @@
     padding: var(--space-2xs);
     padding-right: var(--space-xs);
     border-radius: var(--space-xs);
-    width: 500px;
+    /* width: 500px; */
 
     & * { margin: 0; }
 
@@ -74,7 +74,7 @@
   }
 </style>
 
-<script webc:bucket="defer">
+<script webc:bucket="module">
   /**
    * The <image-card> component has the following attributes:
    * - blob
@@ -183,7 +183,6 @@
       console.log(this.data.compressed.blob)
 
       this.data.compressed.url = URL.createObjectURL(this.data.compressed.blob)
-      document.querySelector('[slot="image-2"]').src = this.data.compressed.url
       this.dom.sizeCompressed.textContent = returnFileSize(this.data.compressed.blob.size)
     }
   }

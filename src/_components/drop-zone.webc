@@ -89,7 +89,7 @@
   }
 </style>
 
-<script webc:bucket="defer">
+<script webc:bucket="module">
   /**
    * The drop zone adds images to the image queue, whic is then used by the
    * <image-queue> component to render the <image-card>s that represent the
@@ -145,9 +145,12 @@
         fileList = this.dom.input.files
       }
 
-      Array.from(fileList).forEach(file => {
-        this.dom.queue.add(file)
-      })
+      this.dispatchEvent(new CustomEvent('filedrop', {
+        bubbles: true,
+        detail: {
+          files: fileList,
+        }
+      }))
     }
   }
 

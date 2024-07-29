@@ -1,21 +1,68 @@
 ---
 layout: 'layouts/base.webc'
 ---
-<h1>Components Demo</h1>
+<header>
+  <h1>Components Demo</h1>
+</header>
 
-<drop-zone for="images"></drop-zone>
-<image-queue id="images"></image-queue>
+<main>
+  <div id="app" class="with-sidebar">
+    <!-- Sidebar -->
+    <div>
+      <drop-zone for="images"></drop-zone>
+      <image-queue id="images"></image-queue>
+      <image-card></image-card>
+    </div>
 
-<image-card>
-  <!-- <img slot="thumbnail" src="/SvMdrt9aT5-800.jpeg" alt=""> -->
-  <!-- <span slot="filename">test_image.jpg</span> -->
-</image-card>
+    <!-- Main canvas -->
+    <div>
+      <!-- Options bar -->
+      <div>
+        <quality-slider></quality-slider>
+      </div>
+      <!-- Image preview -->
+      <div>
+        <image-preview>
+          <image-compare>
+            <img slot="image-1" src="/ATL_MS_1453462_MPP-1080x486.jpg" alt="">
+            <img slot="image-2" src="/ATL_MS_1453462_MPP-1080x486.jpg" alt="">
+          </image-compare>
+        </image-preview>
+      </div>
+    </div>
+  </div>
+</main>
 
-<image-preview>
-  <image-compare>
-    <img slot="image-1" src="/SvMdrt9aT5-800.jpeg" alt="">
-    <img slot="image-2" src="/SvMdrt9aT5-800.jpeg" alt="">
-  </image-compare>
-</image-preview>
+<footer></footer>
 
-<quality-slider value="0.3"></quality-slider>
+<style>
+  #app {
+    --sidebar-width: 30rem;
+
+    > :last-child {
+      border: 1px solid red;
+    }
+  }
+</style>
+
+<script webc:bucket="defer">
+  const imageCompare = document.querySelector('image-compare')
+  const imageQueue = document.querySelector('image-queue')
+  const qualitySlider = document.querySelector('quality-slider')
+
+  console.log(imageCompare)
+
+  document.addEventListener('cardselect', (e) => {
+    console.log('cardselect')
+    const { original, compressed } = e.detail
+    imageCompare.firstElementChild.src = original
+    imageCompare.lastElementChild.src = compressed
+  })
+
+  document.addEventListener('filedrop', (e) => {
+    console.log('filedrop')
+    Array.from(e.detail.files).forEach(file => {
+      imageQueue.add(file)
+    })
+  })
+</script>

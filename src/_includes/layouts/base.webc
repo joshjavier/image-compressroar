@@ -12,7 +12,8 @@
     <!-- external scripts and stylesheets -->
     <link rel="stylesheet" href="/css/main.css" webc:keep>
     <script type="module" src="/js/main.js" webc:keep></script>
-    <script type="module" :src="getBundleFileUrl('js', 'defer')" webc:keep></script>
+    <script type="module" :src="getBundleFileUrl('js', 'module')" webc:keep></script>
+    <script defer :src="getBundleFileUrl('js', 'defer')" webc:keep></script>
   </head>
   <body>
     <!-- SVG Sprite -->

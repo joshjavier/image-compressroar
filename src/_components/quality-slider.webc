@@ -93,7 +93,7 @@
   }
 </style>
 
-<script webc:bucket="defer">
+<script webc:bucket="module">
   class QualitySlider extends HTMLElement {
     connectedCallback() {
       this.dom = {
@@ -106,6 +106,13 @@
         this.dom.range.addEventListener(type, (e) => {
           this.updateSlider()
           this.value = e.target.value
+
+          this.dispatchEvent(new CustomEvent('qualitychange', {
+            bubbles: true,
+            detail: {
+              quality: this.value,
+            },
+          }))
         })
       }
 

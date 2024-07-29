@@ -1,3 +1,5 @@
+@import "_sidebar.css";
+
 .visually-hidden:not(:focus):not(:active) {
   border: 0;
   clip: rect(0 0 0 0);

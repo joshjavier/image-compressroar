@@ -11,10 +11,16 @@
     display: block;
     border: 1px solid red;
     height: 500px;
+
+    & ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
   }
 </style>
 
-<script webc:bucket="defer">
+<script webc:bucket="module">
   class ImageQueue extends HTMLElement {
     constructor() {
       super()
@@ -67,6 +73,16 @@
             card.setAttribute('aria-selected', 'false')
           }
         })
+
+        this.dispatchEvent(new CustomEvent('cardselect', {
+          bubbles: true,
+          detail: {
+            original: imagecard.data.image.src,
+            compressed: imagecard.data.compressed.url,
+            width: imagecard.data.image.naturalWidth,
+            height: imagecard.data.image.naturalHeight,
+          },
+        }))
       }
     }
 
