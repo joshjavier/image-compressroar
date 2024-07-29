@@ -1,3 +1,19 @@
+<ul id="images" role="listbox"></ul>
+<div>
+  <!-- Error message -->
+  <div class="error"></div>
+  <!-- Download link -->
+
+</div>
+
+<style>
+  image-queue {
+    display: block;
+    border: 1px solid red;
+    height: 500px;
+  }
+</style>
+
 <script webc:bucket="defer">
   class ImageQueue extends HTMLElement {
     constructor() {
@@ -5,13 +21,58 @@
       this.images = []
     }
 
+    connectedCallback() {
+      this.dom = {
+        listbox: this.querySelector('[role="listbox"]'),
+        download: this.querySelector('.download'),
+      }
+
+      this.addEventListener('click', this)
+
+      if (!this.activecard) {
+        this.activecard = 0
+      }
+    }
+
+    // Reflection
+    set activecard(val) {
+      this.setAttribute('activecard', val)
+    }
+    get activecard() {
+      return Number(this.getAttribute('activecard'))
+    }
+
+    add(file) {
+      const imagecard = new ImageCard(file)
+      this.dom.listbox.appendChild(imagecard)
+    }
+
     render() {
       this.images.forEach(image => {
         console.log(image.name, image.size)
         let ic = new ImageCard(image)
         this.appendChild(ic)
-      });
+      })
     }
+
+    handleEvent(e) {
+      const imagecard = e.target.closest('image-card')
+      if (e.type === 'click' && imagecard) {
+        const cards = Array.from(this.dom.listbox.children)
+        this.activecard = cards.indexOf(imagecard)
+        cards.forEach((card, index) => {
+          if (index === this.activecard) {
+            card.setAttribute('aria-selected', 'true')
+          } else {
+            card.setAttribute('aria-selected', 'false')
+          }
+        })
+      }
+    }
+
+    downloadOne() {}
+
+    downloadAll() {}
   }
 
   if (!customElements.get('image-queue')) {

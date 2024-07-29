@@ -146,8 +146,7 @@
       }
 
       Array.from(fileList).forEach(file => {
-        const imagecard = new ImageCard(file)
-        this.dom.queue.appendChild(imagecard)
+        this.dom.queue.add(file)
       })
     }
   }
