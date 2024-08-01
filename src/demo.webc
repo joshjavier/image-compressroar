@@ -22,7 +22,7 @@ layout: 'layouts/base.webc'
       </div>
       <!-- Image preview -->
       <div class="center">
-        <image-preview mode="pointerdown"></image-preview>
+        <image-preview></image-preview>
       </div>
     </div>
   </div>
