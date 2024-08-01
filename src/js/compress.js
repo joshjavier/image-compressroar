@@ -1,18 +1,21 @@
 import { saveAs } from 'file-saver';
+import { convertFileSize } from "./convert-img-size.js";
+import { addImageSidebar } from "./sidebar.js";
+import { getCurrentSelectedImg } from "./sidebar.js";
+import { getFullQualImgs, resetFullQualImgs } from "./sidebar.js";
+import { newImgSizeColor } from "./img-size-style.js";
 
 const fileInput = document.getElementById("fileInput");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const imageCompare = document.querySelector('image-compare');
 const downloadLink = document.getElementById("downloadLink");
-const clearBtn = document.querySelector('button.clear')
-const cardContainer = document.getElementById("card-container")
+const clearBtn = document.querySelector('button.clear');
 
 var JSZip = require("jszip");
 
 /** @type {string} url - The object URL of the compressed image */
 let url
-let fullQualImgs = [];
 
 /**
  * Loads an image on a slot in the <image-preview> component
@@ -29,7 +32,7 @@ function loadImage(img, slot, quality = 1) {
 
   if (quality === 1) {
     imgEl.src = img.src; // Display the original image on the DOM
-    fullQualImgs.push(img.src);
+    getFullQualImgs().push(img.src);
     return;
   }
 
@@ -41,11 +44,17 @@ function loadImage(img, slot, quality = 1) {
 
   canvas.toBlob(
     function (blob) {
-      URL.revokeObjectURL(url);        // Clear existing object URL from memory
-      url = URL.createObjectURL(blob); // Save the object URL of the new compressed image
+      url = "";                           // Clear existing object URL from memory
+      url = URL.createObjectURL(blob);    // Save the object URL of the new compressed image
 
-      imgEl.src = url;                 // Display the compressed image on the DOM
-      addImageCarousel(blob)
+      imgEl.src = url;                   // Display the compressed image on the DOM
+      if (fileInput.files.length > 1) {
+        addImageSidebar(blob);
+      }
+      else {
+        singleUploadInfos(blob);
+      }
+      selectCurrentImg();
     },
     "image/jpeg",
     quality
@@ -56,14 +65,14 @@ export function compressImage()
 {
   if (fileInput.files.length > 0)
   {
-    clearBtn.style.display = 'inline-block'
-    fullQualImgs = [];                                        //Remove all array items
-    document.getElementById("card-container").innerHTML = ''; //Remove child elements
+    resetFullQualImgs();
+    document.getElementById("cardContainer").innerHTML = '';
 
     for (let i = 0; i < fileInput.files.length; i++) {
       let file = fileInput.files[i];
       let reader = new FileReader();
       let slider = document.getElementById("qualitySlider");
+      // console.log(i + " | " + file);
 
       reader.onload = function (e) {
         const dataUrl = e.target.result
@@ -76,107 +85,155 @@ export function compressImage()
           imageCompare.style.setProperty('--image-compare-width', `${img.width}px`);
 
           // Load the original and compressed versions of the image
+          // loadImage(img, 'image-1')
           loadImage(img, 'image-1')
           loadImage(img, 'image-2', slider.value)
         }
         img.src = dataUrl;
+        // console.log(img.src);
       };
       reader.readAsDataURL(file);
     }
   }
-  else {
-    // Input is empty.
-    let errorMSG = document.getElementById("errorMSG");
-    errorMSG.innerHTML = "Please choose an image first."
-  }
 }
 
- //Check all images that are added.
+//Check all images that are added.
 function updateInputDOM() {
-  const imgInputLabel = document.getElementById("imgInputLabel");
-
-  if (fileInput.files.length === 0) {
-    imgInputLabel.textContent = 'Upload/Drag an Image'
-    imgInputLabel.removeAttribute('style')
-  }
+  let singleInfos = document.getElementById("compareContainer").getElementsByTagName("p");
+  let outBtnContainer = document.getElementById("outDownloadBTN");
+  let buttons = document.getElementById("buttons");
+  let sidebar = document.getElementById("sidebar");
+  let inputFile = document.getElementById("inputFile");
 
   if (fileInput.files.length > 0) {
-    document.getElementById("errorMSG").innerHTML = "";
-
-    //Ordered list of all image file names
-    let imgNames = "<ol>";
-    for (let i = 0; i < fileInput.files.length; i++){
-      if (i == fileInput.files.length - 1){
-        imgNames += "<li>" + fileInput.files[i].name + "</li></ol>";
-      }
-      else {
-        imgNames += "<li>" + fileInput.files[i].name + "</li>";
+    previewLayout();
+    compressImage(); //Start compressing
+    if (fileInput.files.length == 1){
+      inputFile.style.height = "128px";
+      outBtnContainer.style.display = "unset";
+      outBtnContainer.append(buttons);                                     // Change buttons position below the image compare
+      document.getElementById("sidebar").style.display = "none";          // Hide sidebar
+      document.getElementById("compareContainer").style.height = "auto";
+    }
+    else if (fileInput.files.length > 1){
+      sidebar.append(buttons);
+      sidebar.prepend(inputFile);
+      inputFile.style.width = "100%";
+      inputFile.style.height = "128px";
+      outBtnContainer.style.display = "none";
+      for (let i = 0; i < singleInfos.length; i++){
+        singleInfos[i].style.display = "none";
+        document.getElementById("singleMark").style.display = "none";
+        clearBtn.style.display = "inline";
       }
     }
-    imgInputLabel.innerHTML = imgNames;
-    imgInputLabel.style.textAlign = "left";
-    imgInputLabel.style.top = "0";
-    imgInputLabel.style.left = "0";
-
-    compressImage();                        //Start compressing
-    downloadLink.style.display = "inline"; //Display download button
+    buttons.style.display = "flex"; //Display download and clear buttons
   }
 }
+
+// When an image is uploaded
+fileInput.addEventListener("change", updateInputDOM);
 
 //Download multiple image URLs
 downloadLink.addEventListener("click", function() {
   const imgLinks = document.getElementsByClassName("imgLinks");
-  const linkHolder = document.createElement("a");
+  const imgNames = document.getElementsByClassName("imgName");
 
-  var zip = new JSZip();
-  var photoZip = zip.folder("photos");
-  // this call will create photos/README
-  for (let i = 0; i < imgLinks.length; i++) {
-    let blob = fetch(imgLinks[i].src).then(r => r.blob());
-    photoZip.file("Compressed_" + fileInput.files[i].name, blob);
-    console.log(imgLinks[i].src);
-    // linkHolder.download = "Compressed_" + fileInput.files[i].name;
-    // linkHolder.href = imgLinks[i].src;
-    // linkHolder.click();
+  if (fileInput.files.length > 1){
+    //Multiple image download in a zip file
+    var zip = new JSZip();
+    var photoZip = zip.folder("95kb");
+    // this call will create photos/README
+    for (let i = 0; i < imgLinks.length; i++) {
+      let blob = fetch(imgLinks[i].src).then(r => r.blob());
+      photoZip.file(imgNames[i].value, blob);
+    }
+    zip.generateAsync({type:"blob"})
+    .then(function(content) {
+      saveAs(content, "95kb.zip");
+    });
   }
-  zip.generateAsync({type:"blob"})
-  .then(function(content) {
-    saveAs(content, "example.zip");
-  });
+  else if (fileInput.files.length == 1){
+    //Single image file download
+    let compressedImg = imageCompare.querySelector(`[slot="image-2"]`);
+    let dlEl = document.createElement("a");
+    dlEl.href = compressedImg.src;
+    dlEl.download = document.getElementById("singleFileName").value;
+    dlEl.click();
+  }
 });
 
-function addImageCarousel(u){
-  let card = document.createElement("button"); //Create button element
-  let newImg = document.createElement("img"); //Create image element
-  let imgUrl = URL.createObjectURL(u);
+// Layout for a single image upload
+function singleUploadInfos(u){
+  let origSize = document.getElementById("origImgSize");
+  let compressedSize = document.getElementById("compressedImgSize");
+  let cardContainer = document.getElementById("cardContainer");
+  let mark = document.getElementById("singleMark");
+  let newSizeEl = document.getElementById("compressedImgSize");
+  let newImgSize = convertFileSize(u.size);
+  let imgName = document.getElementById("singleFileName");
 
-  card.className = "card";
-  card.id = "card-" + cardContainer.childElementCount;
-  newImg.src = imgUrl;              //Assign compressed image as a thumbnail
-  newImg.className = "imgLinks";    //Assign class name
-  card.appendChild(newImg);         //Adding the image inside the button element
-  cardContainer.appendChild(card); //Adding button inside the card-container div element
-
-  //Adding on click event for switching image preview
-  card.onclick = function() {
-    document.querySelector(`[slot="image-1"]`).src = fullQualImgs[card.id.match(/\d+/)[0]];
-    document.querySelector(`[slot="image-2"]`).src = imgUrl;
-  };
+  origSize.innerHTML = convertFileSize(fileInput.files[cardContainer.childElementCount].size); //Get and display image original size
+  compressedSize.innerHTML = convertFileSize(u.size);                                          //Get and display image compressed size
+  newImgSizeColor(newImgSize, mark, newSizeEl);                                                //Change text color style to red or green
+  imgName.value = fileInput.files[cardContainer.childElementCount].name;
 }
 
-fileInput.addEventListener('change', updateInputDOM)
+// Display the last card selected before recompressng
+function selectCurrentImg(){
+  let cardContainer = document.getElementById("cardContainer");
 
+  if (cardContainer.childElementCount == fileInput.files.length){
+    if (getCurrentSelectedImg() == ""){
+      document.getElementById("card-0").click();        // Select the first card when currentSelectedImg is empty
+    }
+    else {
+      // Loop through all cards
+      for (let i = 0; i < fileInput.files; i++){
+        if (getCurrentSelectedImg() == "card-"+i){
+          document.getElementById("card-"+i).click();  // Trigger click event to display image to the image compare
+        }
+      }
+    }
+  }
+}
+
+// Clear image files uploaded
 clearBtn.addEventListener('click', () => {
   // Reset file input
   fileInput.value = null
   updateInputDOM()
-
-  // Hide buttons
-  clearBtn.style.display = 'none'
-  downloadLink.style.display = 'none'
+  displayFileInput()
 
   // Clear carousel and image preview
   cardContainer.innerHTML = ''
   imageCompare.firstElementChild.removeAttribute('src')
   imageCompare.lastElementChild.removeAttribute('src')
 })
+
+// Change elements displayed after images are uploaded
+function previewLayout() {
+  let previewContainer = document.getElementById("previewContainer");
+  document.getElementById("previewSidebar").style.display = "flex";     // Display sidebar
+  previewContainer.style.display = "flex";
+
+  if (fileInput.files.length > 1) {
+    previewContainer.style.flexDirection = "row-reverse";         // Change reverse direction so that the slider is in the left side of the image compare
+    document.getElementById("sidebar").style.display = "inline";
+  }
+  else {
+    previewContainer.style.flexDirection = "row";
+  }
+}
+
+// Display back the file input element
+function displayFileInput(){
+  let inputFile = document.getElementById("inputFile");
+  inputFile.style.width = "400px";
+  inputFile.style.height = "400px";
+  document.body.insertBefore(inputFile, document.getElementById("previewSidebar"));
+
+  document.getElementById("inputFile").style.display = "block";
+  document.getElementById("previewSidebar").style.display = "none";
+  document.getElementById("outDownloadBTN").style.display = "none";
+}
