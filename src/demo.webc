@@ -20,6 +20,7 @@ layout: 'layouts/base.webc'
       <!-- Options bar -->
       <div class="options">
         <quality-slider></quality-slider>
+        <preview-toggle></preview-toggle>
       </div>
       <!-- Image preview -->
       <div class="center">
@@ -45,6 +46,11 @@ layout: 'layouts/base.webc'
 
     > main {
       flex-grow: 1;
+    }
+
+    & .options {
+      display: flex;
+      gap: var(--space-s, 1em);
     }
   }
 </style>
@@ -87,4 +93,8 @@ layout: 'layouts/base.webc'
       }, { once: true })
     }
   }, 500))
+
+  document.addEventListener('previewtoggle', (e) => {
+    imagePreview.mode = e.detail.preview
+  })
 </script>

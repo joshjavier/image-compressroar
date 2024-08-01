@@ -1,0 +1,76 @@
+<script webc:bucket="module">
+  class PreviewToggle extends HTMLElement {
+    set value(val) {
+      this.setAttribute('value', val)
+    }
+    get value() {
+      return this.getAttribute('value')
+    }
+
+    static get observedAttributes() {
+      return ['value']
+    }
+    attributeChangedCallback(name, oldVal, newVal) {
+      if (!this.dom) return
+      switch (name) {
+        case 'value':
+          this.updateDOM()
+          break
+      }
+    }
+
+    connectedCallback() {
+      if (!this.value) {
+        this.value = 'slider'
+      }
+
+      const mouse = matchMedia('(pointer:fine)').matches
+      this.innerHTML = `
+        <form>
+          <fieldset role="radiogroup">
+            <legend>Preview Mode</legend>
+            <label>
+              <input type="radio" name="preview" value="slider">
+              <span>Slider</span>
+            </label>
+            <label>
+              <input type="radio" name="preview" value="pointerdown">
+              <span>${mouse ? 'Click' : 'Tap'}-and-hold</span>
+            </label>
+          </fieldset>
+        </form>
+      `
+
+      this.dom = {
+        form: this.querySelector('form'),
+      }
+
+      this.data = {
+        radiogroup: this.dom.form.elements['preview'],
+      }
+
+      this.addEventListener('change', (e) => {
+        this.value = this.data.radiogroup.value
+
+        this.dispatchEvent(new CustomEvent('previewtoggle', {
+          bubbles: true,
+          detail: {
+            preview: this.value,
+          },
+        }))
+      })
+
+      this.dom.form.addEventListener('submit', (e) => e.preventDefault())
+
+      this.updateDOM()
+    }
+
+    updateDOM() {
+      this.data.radiogroup.value = this.value
+    }
+  }
+
+  if (!customElements.get('preview-toggle')) {
+    customElements.define('preview-toggle', PreviewToggle)
+  }
+</script>
