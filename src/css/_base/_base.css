@@ -1,0 +1,32 @@
+@import "reset.css";
+@import "fonts.css";
+@import "root.css";
+
+body {
+  margin: 0;
+  font-family: var(--text-sans);
+  /* font-size: var(--step-0); */
+  font-variation-settings:
+    'wdth' 50,  /* thinner characters */
+    'YTLC' 540; /* increase x-height */
+  background-color: var(--color-sheet, var(--color-light));
+  color: var(--color-text, var(--color-dark));
+}
+
+:where(p, h1, h2, h3, h4, h5, h6, li) {
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+
+h1 {
+  /* font-size: var(--step-5); */
+}
+
+a:not([href]) {
+  display: none;
+}
+
+:focus-visible {
+  outline: 9px double black;
+  box-shadow: 0 0 0 6px white;
+}

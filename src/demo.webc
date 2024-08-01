@@ -14,20 +14,15 @@ layout: 'layouts/base.webc'
       <image-card></image-card>
     </div>
 
-    <!-- Main canvas -->
-    <div>
+    <!-- Main panel -->
+    <div class="cover">
       <!-- Options bar -->
-      <div>
+      <div class="options">
         <quality-slider></quality-slider>
       </div>
       <!-- Image preview -->
-      <div>
-        <image-preview>
-          <image-compare>
-            <img slot="image-1" src="/ATL_MS_1453462_MPP-1080x486.jpg" alt="">
-            <img slot="image-2" src="/ATL_MS_1453462_MPP-1080x486.jpg" alt="">
-          </image-compare>
-        </image-preview>
+      <div class="center">
+        <image-preview mode="pointerdown"></image-preview>
       </div>
     </div>
   </div>
@@ -46,17 +41,14 @@ layout: 'layouts/base.webc'
 </style>
 
 <script webc:bucket="defer">
-  const imageCompare = document.querySelector('image-compare')
+  const imagePreview = document.querySelector('image-preview')
   const imageQueue = document.querySelector('image-queue')
   const qualitySlider = document.querySelector('quality-slider')
-
-  console.log(imageCompare)
 
   document.addEventListener('cardselect', (e) => {
     console.log('cardselect')
     const { original, compressed } = e.detail
-    imageCompare.firstElementChild.src = original
-    imageCompare.lastElementChild.src = compressed
+    imagePreview.sources = [original, compressed]
   })
 
   document.addEventListener('filedrop', (e) => {

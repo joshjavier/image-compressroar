@@ -1,9 +1,10 @@
-@import "_imgInput.css";
-@import "_button.css";
-@import "_slider.css";
-@import "_image-compare.css";
-@import "_carousel.css";
-@import "_icon.css";
+@import "imgInput.css";
+@import "button.css";
+@import "slider.css";
+@import "image-compare.css";
+@import "carousel.css";
+@import "icon.css";
+@import "box.css";
 
 .container {
     margin: auto;

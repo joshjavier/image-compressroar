@@ -1,0 +1,23 @@
+.cover {
+  --space: var(--space-s, 1rem);
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100vh;
+  padding: var(--space);
+
+  > * {
+    margin-block: var(--space);
+  }
+
+  > :first-child:not(.center) {
+    margin-block-start: 0;
+  }
+
+  > :last-child:not(.center) {
+    margin-block-end: 0;
+  }
+
+  > .center {
+    margin-block: auto;
+  }
+}

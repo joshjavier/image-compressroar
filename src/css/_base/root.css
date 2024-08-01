@@ -1,0 +1,29 @@
+:root {
+  /* Typography ------------------------------------------------------------ */
+
+  --text-sans: 'Roboto Flex', Inter, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
+  --text-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+  --measure: 60ch;
+
+  /* Colors ---------------------------------------------------------------- */
+
+  --color-light: #ffffff;
+  --color-light-mod-1: #ebebeb;
+  --color-light-mod-2: #c4c4c4;
+  --color-dark: #393939;
+  --color-dark-mod-1: #4d4d4d;
+  --color-dark-mod-2: #747474;
+
+  --color-primary: #eb5e28;
+  --color-primary-tint: #fce7df;
+  --color-primary-shade: #804832;
+
+  --color-info: #0683db;
+  --color-info-tint: #daecfa;
+  --color-positive: #0ca626;
+  --color-positive-tint: #dbf2df;
+  --color-caution: #ef7015;
+  --color-caution-tint: #fdeadc;
+  --color-negative: #f04150;
+  --color-negative-tint: #fde2e5;
+}
