@@ -5,7 +5,7 @@ const slider = document.getElementById("qualitySlider");
 // Set default value for the quality slider and input
 function initialQualityVal(){
   const slider = document.getElementById("qualitySlider");
-  slider.value = 0.1;
+  slider.value = 0.5;
 }
 initialQualityVal();
 
