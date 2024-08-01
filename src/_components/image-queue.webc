@@ -81,6 +81,7 @@
             compressed: imagecard.data.compressed.url,
             width: imagecard.data.image.naturalWidth,
             height: imagecard.data.image.naturalHeight,
+            quality: imagecard.quality,
           },
         }))
       }

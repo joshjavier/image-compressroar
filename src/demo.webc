@@ -49,6 +49,7 @@ layout: 'layouts/base.webc'
     console.log('cardselect')
     const { original, compressed } = e.detail
     imagePreview.sources = [original, compressed]
+    qualitySlider.value = e.detail.quality
   })
 
   document.addEventListener('filedrop', (e) => {

@@ -95,6 +95,27 @@
 
 <script webc:bucket="module">
   class QualitySlider extends HTMLElement {
+    set value(val) {
+      this.setAttribute('value', val)
+    }
+    get value() {
+      return this.getAttribute('value')
+    }
+
+    static get observedAttributes() {
+      return ['value']
+    }
+    attributeChangedCallback(name, oldVal, newVal) {
+      if (!this.dom) return
+      switch (name) {
+        // update internal slider when quality attr is changed programmatically
+        case 'value':
+          this.dom.range.value = newVal
+          this.updateSlider()
+          break
+      }
+    }
+
     connectedCallback() {
       this.dom = {
         range: this.querySelector('input[type="range"]'),
@@ -118,33 +139,11 @@
 
       if (this.value) {
         this.dom.range.value = this.value
-        this.updateSlider()
       } else {
         this.value = 0.5 // Set default starting value
       }
-    }
 
-    // Reflection
-    set value(val) {
-      this.setAttribute('value', val)
-    }
-    get value() {
-      return this.getAttribute('value')
-    }
-
-    // Watch for attribute changes
-    static get observedAttributes() {
-      return ['value']
-    }
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (!this.dom) return
-      switch (name) {
-        case 'value':
-          if (oldVal === newVal) return
-          this.dom.range.value = newVal
-          this.updateSlider()
-          break
-      }
+      this.updateSlider()
     }
 
     updateSlider() {
