@@ -10,9 +10,9 @@ layout: 'layouts/base.webc'
     <!-- Sidebar -->
     <div>
       <drop-zone for="images"></drop-zone>
+      <image-card style="display: none;"></image-card> <!-- TODO: refactor so we don't need to insert an empty tag here -->
       <image-queue id="images">
       </image-queue>
-      <image-card style="display: none;"></image-card> <!-- TODO: refactor so we don't need to insert an empty tag here -->
     </div>
 
     <!-- Main panel -->
@@ -36,7 +36,7 @@ layout: 'layouts/base.webc'
   #app {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
 
     > header {
       padding: 1em;
@@ -46,6 +46,16 @@ layout: 'layouts/base.webc'
 
     > main {
       flex-grow: 1;
+
+      > :first-child {
+        display: flex;
+        flex-direction: column;
+        align-self: flex-start;
+
+        > :last-child {
+          flex-grow: 1;
+        }
+      }
     }
 
     & .options {
@@ -96,5 +106,9 @@ layout: 'layouts/base.webc'
 
   document.addEventListener('previewtoggle', (e) => {
     imagePreview.mode = e.detail.preview
+  })
+
+  document.addEventListener('queueclear', () => {
+    imagePreview.sources = ['', '']
   })
 </script>

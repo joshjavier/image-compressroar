@@ -9,3 +9,37 @@
     width: 90%;
     font-size: 3rem;
 }
+
+.btn {
+  border: 1px solid transparent;
+  padding: var(--space-s, 1em);
+  cursor: pointer;
+
+  &:hover {
+    transition: all 0.25s;
+  }
+
+  &.outline {
+    border-color: currentColor;
+    background-color: var(--color-light, #fff);
+  }
+
+  &[id="download"] {
+    background-color: var(--color-positive);
+    color: var(--color-light, #fff);
+    font-weight: 700;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--color-positive) 50%, var(--color-dark));
+    }
+  }
+
+  &[id="clear"] {
+    color: var(--color-negative);
+
+    &:hover {
+      background-color: var(--color-negative-tint);
+      color: color-mix(in srgb, var(--color-negative), var(--color-dark));
+    }
+  }
+}

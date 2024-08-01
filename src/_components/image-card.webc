@@ -166,14 +166,6 @@
       }
     }
 
-    // Reflection
-    set quality(val) {
-      this.setAttribute('quality', val)
-    }
-    get quality() {
-      return Number(this.getAttribute('quality'))
-    }
-
     render() {
       this.loadImage()
       this.dom.filename.textContent = this.data.file.name

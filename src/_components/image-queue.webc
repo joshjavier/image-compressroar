@@ -3,19 +3,36 @@
   <!-- Error message -->
   <div class="error"></div>
   <!-- Download link -->
-
+  <div class="buttons">
+    <button id="download" class="btn">Download</button>
+    <button id="clear" class="btn outline">Clear Queue</button>
+  </div>
 </div>
 
 <style>
   image-queue {
-    display: block;
-    border: 1px solid red;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-s, 1em);
+    /* border: 1px solid red; */
     /* height: 500px; */
 
     & ul {
       list-style: none;
       margin: 0;
       padding: 0;
+
+      &:empty ~ * {
+        display: none; /* only show buttons when queue is not empty */
+      }
+    }
+
+    & .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-s, 1em);
+      padding: var(--space-s, 1em);
     }
   }
 </style>
@@ -30,10 +47,15 @@
     connectedCallback() {
       this.dom = {
         listbox: this.querySelector('[role="listbox"]'),
-        download: this.querySelector('.download'),
+        download: this.querySelector('#download'),
+        clear: this.querySelector('#clear'),
       }
 
       this.addEventListener('click', this)
+      this.dom.clear.addEventListener('click', (e) => {
+        this.dom.listbox.innerHTML = ''
+        this.dispatchEvent(new CustomEvent('queueclear', { bubbles: true }))
+      })
 
       if (!this.activecard) {
         this.activecard = 0
