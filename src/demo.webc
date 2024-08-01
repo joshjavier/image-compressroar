@@ -1,17 +1,18 @@
 ---
 layout: 'layouts/base.webc'
 ---
-<header>
-  <h1>Components Demo</h1>
-</header>
+<div id="app">
+  <header>
+    <h1>Image Compressroar Demo</h1>
+  </header>
 
-<main>
-  <div id="app" class="with-sidebar">
+  <main class="with-sidebar">
     <!-- Sidebar -->
     <div>
       <drop-zone for="images"></drop-zone>
-      <image-queue id="images"></image-queue>
-      <image-card></image-card>
+      <image-queue id="images">
+      </image-queue>
+      <image-card style="display: none;"></image-card> <!-- TODO: refactor so we don't need to insert an empty tag here -->
     </div>
 
     <!-- Main panel -->
@@ -25,17 +26,25 @@ layout: 'layouts/base.webc'
         <image-preview></image-preview>
       </div>
     </div>
-  </div>
-</main>
+  </main>
 
-<footer></footer>
+  <!-- <footer></footer> -->
+</div>
 
 <style>
   #app {
-    --sidebar-width: 30rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 
-    > :last-child {
-      border: 1px solid red;
+    > header {
+      padding: 1em;
+
+      & * { margin: 0; }
+    }
+
+    > main {
+      flex-grow: 1;
     }
   }
 </style>
@@ -44,6 +53,16 @@ layout: 'layouts/base.webc'
   const imagePreview = document.querySelector('image-preview')
   const imageQueue = document.querySelector('image-queue')
   const qualitySlider = document.querySelector('quality-slider')
+
+  const debounce = (callback, wait) => {
+    let timeoutId = null;
+    return (...args) => {
+      window.clearTimeout(timeoutId);
+      timeoutId = window.setTimeout(() => {
+        callback.apply(null, args);
+      }, wait);
+    };
+  }
 
   document.addEventListener('cardselect', (e) => {
     console.log('cardselect')
@@ -58,4 +77,14 @@ layout: 'layouts/base.webc'
       imageQueue.add(file)
     })
   })
+
+  document.addEventListener('qualitychange', debounce((e) => {
+    const selected = document.querySelector('[aria-selected="true"]')
+    if (selected) {
+      selected.quality = e.detail.quality
+      selected.addEventListener('imagecompress', (e) => {
+        imagePreview.sources = [e.detail.original, e.detail.compressed]
+      }, { once: true })
+    }
+  }, 500))
 </script>

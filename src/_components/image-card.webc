@@ -9,10 +9,11 @@
 <style>
   image-card {
     display: flex;
-    gap: var(--space-xs);
-    padding: var(--space-2xs);
-    padding-right: var(--space-xs);
-    border-radius: var(--space-xs);
+    gap: var(--space-xs, 1em);
+    border: 1px solid transparent;
+    padding: var(--space-2xs, 1em);
+    /* padding-right: var(--space-xs); */
+    /* border-radius: var(--space-xs); */
     /* width: 500px; */
 
     & * { margin: 0; }
@@ -91,9 +92,34 @@
    */
   import { returnFileSize } from '../js/utils.js'
 
+  /**
+   * The ImageCard component takes a File object representing an image, which
+   * can come from an `<input type="file">` or via dragging images into the
+   * DropZone. The File prop is used to derive image metadata for the original
+   * and compressed versions. The `quality` attribute is used to keep track of
+   * the current compression level, which can be adjusted by the user via the
+   * QualitySlider component.
+   */
   class ImageCard extends HTMLElement {
-    // required prop is the image blob, where we can derive the image url, and original and compressed size.
-    // this component will also keep track of the quality, which can be adjusted by the <quality-slider>
+    set quality(val) {
+      this.setAttribute('quality', val)
+    }
+    get quality() {
+      return Number(this.getAttribute('quality'))
+    }
+
+    static get observedAttributes() {
+      return ['quality']
+    }
+    async attributeChangedCallback(name, oldVal, newVal) {
+      if (!this.dom || !this.data.image) return
+      switch (name) {
+        case 'quality':
+          this.compressImage()
+          break
+      }
+    }
+
     constructor(file) {
       super()
       this.data = {
@@ -184,6 +210,14 @@
 
       this.data.compressed.url = URL.createObjectURL(this.data.compressed.blob)
       this.dom.sizeCompressed.textContent = returnFileSize(this.data.compressed.blob.size)
+
+      this.dispatchEvent(new CustomEvent('imagecompress', {
+        bubbles: true,
+        detail: {
+          original: this.data.image.src,
+          compressed: this.data.compressed.url,
+        },
+      }))
     }
   }
 

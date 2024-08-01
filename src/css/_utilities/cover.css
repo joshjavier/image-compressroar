@@ -2,7 +2,7 @@
   --space: var(--space-s, 1rem);
   display: flex;
   flex-direction: column;
-  min-block-size: 100vh;
+  /* min-block-size: 100vh; */
   padding: var(--space);
 
   > * {
