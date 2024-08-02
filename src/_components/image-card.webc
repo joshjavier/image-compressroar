@@ -43,6 +43,15 @@
       & .filename {
         font-size: var(--step-0);
         font-weight: 400;
+        overflow-wrap: anywhere; /* force line break to prevent overflowing */
+
+        /* limit to 2 lines */
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+                line-clamp: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       & .details {
@@ -139,10 +148,10 @@
         <div class="text">
           <h3 class="filename">TEST_ATL_MS_1453462_MPP-1080x486.jpg</h3>
           <div class="details">
-            <p class="size">
-              <span class="compressed"><strong>98.72 KB</strong> compressed</span>
-              <span class="original">vs. <span>203.76 KB</span> original size</span>
-            </p>
+            <div class="size">
+              <p class="compressed">Size: <strong>98.72 KB</strong></p>
+              <p class="original">Original: <span>203.76 KB</span></p>
+            </div>
             <svg class="icon icon-success"><use href="#check-solid" /></svg>
             <svg class="icon icon-failure"><use href="#cross-solid" /></svg>
           </div>
@@ -169,6 +178,7 @@
     render() {
       this.loadImage()
       this.dom.filename.textContent = this.data.file.name
+      this.dom.filename.title = this.data.file.name
       this.dom.sizeOriginal.textContent = returnFileSize(this.data.file.size)
     }
 
@@ -195,7 +205,8 @@
 
       ctx.drawImage(this.data.image, 0, 0)
       this.data.compressed.blob = await offscreenCanvas.convertToBlob({
-        type: this.data.file.type,
+        // type: this.data.file.type,
+        type: 'image/jpeg',
         quality: this.quality,
       })
       console.log(this.data.compressed.blob)

@@ -34,6 +34,13 @@
       gap: var(--space-s, 1em);
       padding: var(--space-s, 1em);
     }
+
+    /* make the buttons and validation message stick to the bottom */
+    > :last-child {
+      position: sticky;
+      bottom: 0;
+      background-color: hsl(0 0% 0% / 50%);
+    }
   }
 </style>
 

@@ -8,7 +8,7 @@ layout: 'layouts/base.webc'
 
   <main class="with-sidebar">
     <!-- Sidebar -->
-    <div>
+    <div class="sidebar">
       <drop-zone for="images"></drop-zone>
       <image-card style="display: none;"></image-card> <!-- TODO: refactor so we don't need to insert an empty tag here -->
       <image-queue id="images">
@@ -16,16 +16,21 @@ layout: 'layouts/base.webc'
     </div>
 
     <!-- Main panel -->
-    <div class="cover">
+    <div class="main-panel">
+
       <!-- Options bar -->
       <div class="options">
         <quality-slider></quality-slider>
         <preview-toggle></preview-toggle>
       </div>
+
       <!-- Image preview -->
-      <div class="center">
-        <image-preview></image-preview>
+      <div class="full-image cover">
+        <div class="center">
+          <image-preview></image-preview>
+        </div>
       </div>
+
     </div>
   </main>
 
@@ -34,33 +39,56 @@ layout: 'layouts/base.webc'
 
 <style>
   #app {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+    --header-size: 60px;
 
     > header {
-      padding: 1em;
+      padding: 10px;
+      height: var(--header-size);
+      display: flex;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      border-bottom: 1px solid var(--color-light-mod-2);
 
       & * { margin: 0; }
     }
 
     > main {
-      flex-grow: 1;
+      height: calc(100vh - var(--header-size));
 
-      > :first-child {
+      > .sidebar {
         display: flex;
         flex-direction: column;
-        align-self: flex-start;
+        height: 100%;
+        border-right: 1px solid var(--color-light-mod-2);
+        overflow-y: auto;
 
         > :last-child {
-          flex-grow: 1;
+          flex-grow: 1; /* make image queue fill the available vertical space */
         }
+      }
+
+      > .main-panel {
+        height: 100%;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
       }
     }
 
     & .options {
       display: flex;
       gap: var(--space-s, 1em);
+      padding: var(--space-s, 1em);
+      border-bottom: 1px solid var(--color-light-mod-2);
+      background-color: var(--color-light);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    & .full-image {
+      flex-grow: 1;
     }
   }
 </style>

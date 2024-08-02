@@ -1,5 +1,5 @@
 .cover {
-  --space: var(--space-s, 1rem);
+  /* --space: var(--space-s, 1rem); */
   display: flex;
   flex-direction: column;
   /* min-block-size: 100vh; */
