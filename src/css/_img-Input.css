@@ -1,11 +1,14 @@
 .inputFileContainer {
     margin: auto;
-    width: 90%;
-    height: 300px;
-    border: 5px dashed gold;
+    width: 400px;
+    height: 400px;
     margin-top: 20px;
     overflow: hidden;
     position: relative;
+    background-color: #ebebeb;
+    box-shadow: inset 0 3px 10px #c8c8c8;
+    font-family: "Roboto Flex";
+    transition: 0.3s;
 }
 
 #imgInputLabel {
@@ -13,8 +16,10 @@
     height: 100%;
     font-size: 1.2rem;
     position: absolute;
-    top: 45%;
-    left: 1%;
+    top: 42%;
+    left: 0%;
+    transform: translate(0%, 0%);
+    text-align: center;
 }
 
 #fileInput {
@@ -32,16 +37,4 @@
 
 #fileInput:hover, .inputFileContainer label:hover {
     cursor: pointer;
-}
-
-@keyframes scalePop {
-    0% {
-        transform: scale(1,1);
-    }
-    50% {
-        transform: scale(0.95,0.95);
-    }
-    100% {
-        transform: scale(1,1);
-    }
 }

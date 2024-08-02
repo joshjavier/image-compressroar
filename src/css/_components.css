@@ -1,22 +1,64 @@
-@import "_imgInput.css";
+@import "_fonts.css";
+@import "_icon.css";
+@import "_img-Input.css";
 @import "_button.css";
 @import "_slider.css";
 @import "_image-compare.css";
-@import "_carousel.css";
+@import "_sidebar.css";
+@import "_text-area.css";
 
-.container {
-    margin: auto;
-    text-align: center;
-    width: 50%;
-    transition: 0.3s;
+body {
+  font-family: "Roboto Flex";
+}
+
+.title {
+  text-align: center;
+}
+
+.previewContainer {
+  max-width: 1080px;
+  width: 100%;
+  height: auto;
+  margin: auto;
+  text-align: center;
+  transition: 0.3s;
+
+  display: none;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-around;
+}
+
+.previewSidebar {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-around;
+  padding: 10px;
 }
 
 #errorMSG, #downloadLink {
     font-size: 1.5rem;
 }
 
-@media only screen and (max-width: 600px){
+@media only screen and (max-width: 1080px){
+    .previewSidebar {
+      flex-direction: column;
+      padding: 0px;
+    }
+}
+
+@media (orientation: portrait){
     .container {
         width: 100%;
+    }
+
+    .previewContainer {
+      align-items: center;
+    }
+
+    .previewSidebar {
+      margin-top: 10%;
+      padding: 0px;
     }
 }

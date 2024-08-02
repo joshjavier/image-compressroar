@@ -1,0 +1,11 @@
+.imgName{
+  border: 0;
+  width: 80%;
+  font-size: auto;
+  resize: none;
+}
+
+#singleFileName {
+  width: 40%;
+  text-align: center;
+}
