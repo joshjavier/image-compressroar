@@ -63,6 +63,7 @@
         this.dom.listbox.innerHTML = ''
         this.dispatchEvent(new CustomEvent('queueclear', { bubbles: true }))
       })
+      this.dom.download.addEventListener('click', () => this.download())
 
       if (!this.activecard) {
         this.activecard = 0
@@ -116,7 +117,15 @@
       }
     }
 
-    downloadOne() {}
+    download() {
+      if (this.dom.listbox.children.length === 1) {
+        const imagecard = this.dom.listbox.firstElementChild
+        const link = document.createElement('a')
+        link.href = imagecard.data.compressed.url
+        link.download = imagecard.data.file.name
+        link.click()
+      }
+    }
 
     downloadAll() {}
   }
