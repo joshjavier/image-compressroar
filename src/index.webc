@@ -1,0 +1,50 @@
+---
+layout: 'layouts/base.webc'
+---
+<h1 class="title">Image Compressroar</h1>
+<!-- Single/Multiple Image Input file -->
+<div id="inputFile" class="inputFileContainer">
+  <label id="imgInputLabel" for="fileInput">Drag and drop your images here<br/>or, <span style="text-decoration: underline;">browse to select</span></label>
+  <input type="file" id="fileInput" accept="image/*" multiple/>
+</div>
+<div id="previewSidebar" class="previewSidebar">
+  <div id="previewContainer" class="previewContainer">
+    <!-- Image Compare Component -->
+    <div id="compareContainer" class="compareContainer">
+      <p style="float: left;">Before</p>
+      <p style="float: right;">After</p>
+      <image-compare>
+        <img slot="image-1" alt="">
+        <img slot="image-2" alt="">
+      </image-compare>
+      <p id="origImgSize" style="float: left;">Original Size</p>
+      <span class="compressedInfo" style="float: right;">
+        <span id="singleMark" class="mark"></span>
+        <p id="compressedImgSize">Compressed Size</p>
+      </span>
+    </div>
+    <!-- Quality slider adjust -->
+    <div class="sliderContainer">
+      <p>Quality</p>
+      <input type="range" id="qualitySlider" min="0" max="1" step="0.1">
+      <!-- <input type="number" id="qualityInput" min="0" max="1" step="0.1"> -->
+    </div>
+  </div>
+
+  <!-- List of images and download button -->
+  <div id="sidebar" class="sidebar">
+    <div class="cardList">
+      <div id="cardContainer" class="cardContainer">
+      </div>
+    </div>
+    <div id="buttons" class="buttons">
+      <button class="btn clear">Clear Image Queue</button>
+      <button id="downloadLink" class="btn download">Download Compressed Image</button>
+    </div>
+  </div>
+</div>
+<div id="outDownloadBTN" class="buttonContainer">
+  <center><textarea name="singleFileName" id="singleFileName" class="imgName" rows="1"></textarea></center>
+</div>
+<canvas id="canvas" width="320" height="256" style="display: none;"></canvas>
+<br/>
