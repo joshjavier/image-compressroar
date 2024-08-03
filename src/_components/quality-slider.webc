@@ -39,16 +39,19 @@
 
       > .thumb {
         height: 100%;
-        aspect-ratio: 1;
+        aspect-ratio: 1.6;
         position: absolute;
 
         &::before {
-          content: '';
+          content: attr(text);
+          font-size: 0.85rem;
           border: 2px solid var(--color-dark);
           /* outline: var(--space-3xs) solid var(--color-light); */
+          color: #fff;
           background-color: var(--color-primary);
           border-radius: var(--space-2xs);
-          display: block;
+          display: grid;
+          place-items: center;
           margin: var(--thumb-margin);
           height: var(--thumb-size, calc(100% - 2 * var(--thumb-margin, 0px)));
           width: var(--thumb-size, calc(100% - 2 * var(--thumb-margin, 0px)));
@@ -97,6 +100,9 @@
   class QualitySlider extends HTMLElement {
     set value(val) {
       this.setAttribute('value', val)
+      this.dom.thumb.setAttribute('text', Math.round(val * 100) + '%')
+      // Math.round handles cases like 0.14 -> 14.000000000000002 and
+      // 0.29 -> 28.999999999999996 due to the way JavaScript does math :/
     }
     get value() {
       return this.getAttribute('value')
