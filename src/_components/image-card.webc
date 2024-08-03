@@ -99,7 +99,7 @@
    *   size="208652"
    * ></image-card>
    */
-  import { returnFileSize } from '../js/utils.js'
+  import { bytesToSize } from '../js/utils.js'
 
   /**
    * The ImageCard component takes a File object representing an image, which
@@ -115,6 +115,17 @@
     }
     get quality() {
       return Number(this.getAttribute('quality'))
+    }
+    set valid(val) {
+      const isValid = Boolean(val)
+      if (isValid) {
+        this.removeAttribute('aria-invalid')
+      } else {
+        this.setAttribute('aria-invalid', 'true')
+      }
+    }
+    get valid() {
+      return !this.getAttribute('aria-invalid')
     }
 
     static get observedAttributes() {
@@ -179,7 +190,7 @@
       this.loadImage()
       this.dom.filename.textContent = this.data.file.name
       this.dom.filename.title = this.data.file.name
-      this.dom.sizeOriginal.textContent = returnFileSize(this.data.file.size)
+      this.dom.sizeOriginal.textContent = bytesToSize(this.data.file.size)
     }
 
     loadImage() {
@@ -212,7 +223,10 @@
       console.log(this.data.compressed.blob)
 
       this.data.compressed.url = URL.createObjectURL(this.data.compressed.blob)
-      this.dom.sizeCompressed.textContent = returnFileSize(this.data.compressed.blob.size)
+      this.dom.sizeCompressed.textContent = bytesToSize(this.data.compressed.blob.size)
+
+      // size validation
+      this.valid = this.data.compressed.blob.size < 102400
 
       this.dispatchEvent(new CustomEvent('imagecompress', {
         bubbles: true,
