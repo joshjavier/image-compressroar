@@ -10,7 +10,7 @@
     <style webc:keep @raw="getBundle('css')"></style>
 
     <!-- Scripts, deferred until the DOM is ready -->
-    <script webc:keep defer :src="getBundle('js', 'defer')"></script>
+    <script webc:keep defer :src="getBundleFileUrl('js', 'defer')"></script>
     <script webc:keep defer src="/js/main.js"></script>
   </head>
   <body @raw="content"></body>
