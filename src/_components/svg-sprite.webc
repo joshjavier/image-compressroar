@@ -1,0 +1,13 @@
+<svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;">
+
+  <symbol id="check-solid" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="12" fill="var(--color-positive)" />
+    <path d="M6.6665 12.2353L10.4312 16L17.9998 8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="cross-solid" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="12" fill="var(--color-negative)" />
+    <path d="M16.6668 7.33337L7.3335 16.6667M7.3335 7.33337L16.6668 16.6667" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </symbol>
+
+</svg>
