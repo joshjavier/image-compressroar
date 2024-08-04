@@ -5,6 +5,7 @@
 @import "sidebar.css";
 @import "slider.css";
 @import "text-area.css";
+@import "loader.css";
 
 .title {
   text-align: center;

@@ -2,11 +2,3 @@
   width: 24px;
   height: 24px;
 }
-
-.icon-success {
-  color: var(--color-positive);
-}
-
-.icon-failure {
-  color: var(--color-negative);
-}
