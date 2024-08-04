@@ -1,6 +1,33 @@
 @import "reset.css";
 @import "fonts.css";
+@import "root.css";
+
+body {
+  margin: 0;
+  font-family: var(--text-sans);
+  font-variation-settings:
+    'wdth' 60,  /* thinner characters */
+    'YTLC' 540; /* increase x-height */
+  background-color: var(--color-sheet, var(--color-light));
+  color: var(--color-text, var(--color-dark));
+}
+
+/**
+ * Improve text readability by
+ * 1. imposing a decent line length
+ * 2. preventing orphans at the last line of text
+ */
+:where(p, h1, h2, h3, h4, h5, h6, li) {
+  max-width: var(--measure); /* 1 */
+  text-wrap: pretty; /* 2 */
+}
 
 a:not([href]) {
   display: none;
+}
+
+/* @link https://www.sarasoueidan.com/blog/focus-indicators/#a-%E2%80%98universal%E2%80%99-focus-indicator */
+:focus-visible {
+  outline: var(--fluid-6-9, 9px) double black;
+  box-shadow: 0 0 0 var(--fluid-4-6, 6px) white;
 }

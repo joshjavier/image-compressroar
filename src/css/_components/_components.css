@@ -6,10 +6,6 @@
 @import "slider.css";
 @import "text-area.css";
 
-body {
-  font-family: "Roboto Flex";
-}
-
 .title {
   text-align: center;
 }
