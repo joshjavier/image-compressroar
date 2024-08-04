@@ -1,0 +1,144 @@
+<style>
+  image-preview {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+
+    > img {
+      height: 100%;
+      width: 100%;
+
+      &[hidden] {
+        visibility: hidden;
+      }
+
+      &:last-child {
+        position: absolute;
+        top: 0;
+      }
+    }
+  }
+</style>
+
+<script webc:bucket="defer">
+  /**
+   * The ImagePreview component renders a full size preview of the selected
+   * image card, either as an <image-compare> slider or as a compressed image
+   * with a "tap-to-reveal" functionality to view the original image.
+   *
+   * This component auto-updates as the value of the <quality-slider> changes,
+   * allowing users to see the effects of changing the quality of an image in
+   * real time.
+   */
+  class ImagePreview extends HTMLElement {
+    set mode(val) {
+      this.setAttribute('mode', val)
+    }
+    get mode() {
+      return this.getAttribute('mode')
+    }
+    set sources(val) {
+      this.data.original = val[0]
+      this.data.compressed = val[1]
+      this.updateSources()
+    }
+    get sources() {
+      return Object.values(this.data)
+    }
+
+    static get observedAttributes() {
+      return ['mode']
+    }
+    attributeChangedCallback(name, oldVal, newVal) {
+      if (!this.dom) return
+      switch (name) {
+        case 'mode':
+          this.render()
+          this.mapDOM()
+          break
+      }
+    }
+
+    constructor() {
+      super()
+      this.data = {
+        original: null,
+        compressed: null,
+      }
+    }
+
+    connectedCallback() {
+      if (!this.mode) {
+        this.mode = 'slider' // set to 'pointerdown' for tap-and-hold preview
+      }
+
+      this.render()
+      this.mapDOM()
+    }
+
+    render() {
+      let srcOriginal, srcCompressed
+      if (this.sources.every(src => src)) {
+        srcOriginal = ` src="${this.sources[0]}"`
+        srcCompressed = ` src="${this.sources[1]}"`
+      }
+
+      if (this.mode === 'slider') {
+        this.removeEventListener('pointerdown', this.showOriginal)
+        this.removeEventListener('pointerup', this.hideOriginal)
+        this.innerHTML = `
+          <image-compare>
+            <img slot="image-1" alt=""${srcOriginal || ''}>
+            <img slot="image-2" alt=""${srcCompressed || ''}>
+          </image-compare>
+        `
+      } else {
+        this.innerHTML = `
+          <img alt="" draggable="false"${srcCompressed || ''}>
+          <img alt="" draggable="false" hidden${srcOriginal || ''}>
+        `
+        this.addEventListener('pointerdown', this.showOriginal)
+        this.addEventListener('pointerup', this.hideOriginal)
+      }
+    }
+
+    showOriginal() {
+      this.lastElementChild.hidden = false
+    }
+
+    hideOriginal() {
+      this.lastElementChild.hidden = true
+    }
+
+    mapDOM() {
+      let image1, image2
+      if (this.mode === 'slider') {
+        const imageCompare = this.querySelector('image-compare')
+        image1 = imageCompare.firstElementChild
+        image2 = imageCompare.lastElementChild
+      } else {
+        image1 = this.firstElementChild
+        image2 = this.lastElementChild
+      }
+      this.dom = { image1, image2 }
+    }
+
+    updateSources() {
+      const [original, compressed] = this.sources
+      if (this.mode === 'slider') {
+        this.dom.image1.src = original
+        this.dom.image2.src = compressed
+      } else {
+        // For tap-to-reveal mode, put the compressed in image1 and vice versa.
+        this.dom.image1.src = compressed
+        this.dom.image2.src = original
+      }
+    }
+  }
+
+  if (!customElements.get('image-preview')) {
+    customElements.define('image-preview', ImagePreview)
+  }
+</script>
