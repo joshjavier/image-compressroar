@@ -1,0 +1,101 @@
+<style>
+  drop-zone:not(:empty) {
+    position: relative;
+    display: block;
+  }
+
+  .dropzone\:highlight::after {
+    --space: 4px;
+    content: '';
+    position: absolute;
+    top: var(--space, 0);
+    left: var(--space, 0);
+    width: calc(100% - var(--space, 0px) * 2);
+    height: calc(100% - var(--space, 0px) * 2);
+    padding: var(--space);
+    border: 2px dashed;
+    border-radius: var(--space);
+    background-color: hsl(0 0% 0% / 20%);
+  }
+</style>
+
+<script webc:bucket="defer">
+  /**
+   * The DropZone allows users to add images to the queue via drag-and-drop
+   * or by taking input from an associated `<input type="file">` element.
+   *
+   * When used as an empty tag, i.e., `<drop-zone></drop-zone>`, it acts as a
+   * "behavior-only" component, making the whole page _the_ drop zone.
+   *
+   * If you want to specify a visual block to be the drop zone, you can do so
+   * by adding child elements like an instructional label ("Drop images here")
+   * or an `<input type="file>` with the `onchange` attribute set to this
+   * element.
+   *
+   * To associate an input with the dropzone, add an event listener to the
+   * input element for the "change" event and set the callback parameter to
+   * the <drop-zone> element.
+   *
+   * It adds the "dropzone:highlight" class to the document body or itself;
+   * use it to add your own styles for the highlight effect on dragover.
+   *
+   * It emits a "filedrop" event that passes the FileList object which can
+   * be accessed via `detail.files`.
+   */
+  class DropZone extends HTMLElement {
+    connectedCallback() {
+      this.behaviorOnly = !this.children.length
+      this.container = this.behaviorOnly ? document.body : this
+
+      // Add files to queue via drag-and-drop
+      document.addEventListener('drop', this)
+
+      // Highlight on dragover
+      document.addEventListener('dragover', (e) => {
+        e.preventDefault() // allows drop event to fire
+
+        if (this.contains(e.target) || this.behaviorOnly) {
+          e.dataTransfer.dropEffect = 'copy'
+          this.container.classList.add('dropzone:highlight')
+        } else {
+          e.dataTransfer.dropEffect = 'none'
+        }
+      })
+
+      // Remove highlight
+      document.addEventListener('dragleave', (e) => {
+        if (
+          this.behaviorOnly && !e.relatedTarget ||
+          this.contains(e.target) && !this.contains(e.relatedTarget)
+        ) {
+          this.container.classList.remove('dropzone:highlight')
+        }
+      })
+    }
+
+    handleEvent(e) {
+      let fileList
+
+      if (e.type === 'drop') {
+        e.preventDefault() // don't open dragged items as link
+        fileList = e.dataTransfer.files
+        this.container.classList.remove('dropzone:highlight')
+      }
+
+      if (e.type === 'change') {
+        fileList = e.files
+      }
+
+      this.dispatchEvent(new CustomEvent('filedrop', {
+        bubbles: true,
+        detail: {
+          files: fileList,
+        },
+      }))
+    }
+  }
+
+  if (!customElements.get('drop-zone')) {
+    customElements.define('drop-zone', DropZone)
+  }
+</script>
