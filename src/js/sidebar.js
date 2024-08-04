@@ -1,4 +1,4 @@
-import { convertFileSize } from "./convert-img-size.js";
+import { bytesToSize } from "./_utils.js";
 import { newImgSizeColor } from "./img-size-style.js";
 
 var currentSelectedImg = "";
@@ -20,8 +20,8 @@ export function resetFullQualImgs() {
 export function addImageSidebar(u){
   let cardContainer = document.getElementById("cardContainer");
   let imgUrl = URL.createObjectURL(u);
-  let newImgSize = convertFileSize(u.size);
-  let origImgSize = convertFileSize(fileInput.files[cardContainer.childElementCount].size);
+  let newImgSize = bytesToSize(u.size);
+  let origImgSize = bytesToSize(fileInput.files[cardContainer.childElementCount].size);
 
   //Card main element
   let buttonCard = document.createElement("button");

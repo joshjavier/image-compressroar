@@ -1,5 +1,5 @@
 import { saveAs } from 'file-saver';
-import { convertFileSize } from "./convert-img-size.js";
+import { bytesToSize } from "./_utils.js";
 import { addImageSidebar } from "./sidebar.js";
 import { getCurrentSelectedImg } from "./sidebar.js";
 import { getFullQualImgs, resetFullQualImgs } from "./sidebar.js";
@@ -170,11 +170,11 @@ function singleUploadInfos(u){
   let cardContainer = document.getElementById("cardContainer");
   let mark = document.getElementById("singleMark");
   let newSizeEl = document.getElementById("compressedImgSize");
-  let newImgSize = convertFileSize(u.size);
+  let newImgSize = bytesToSize(u.size);
   let imgName = document.getElementById("singleFileName");
 
-  origSize.innerHTML = convertFileSize(fileInput.files[cardContainer.childElementCount].size); //Get and display image original size
-  compressedSize.innerHTML = convertFileSize(u.size);                                          //Get and display image compressed size
+  origSize.innerHTML = bytesToSize(fileInput.files[cardContainer.childElementCount].size); //Get and display image original size
+  compressedSize.innerHTML = bytesToSize(u.size);                                          //Get and display image compressed size
   newImgSizeColor(newImgSize, mark, newSizeEl);                                                //Change text color style to red or green
   imgName.value = fileInput.files[cardContainer.childElementCount].name;
 }
