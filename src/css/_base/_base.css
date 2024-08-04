@@ -1,0 +1,6 @@
+@import "reset.css";
+@import "fonts.css";
+
+a:not([href]) {
+  display: none;
+}

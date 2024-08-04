@@ -1,5 +1,0 @@
-@import "_reset.css";
-
-a:not([href]) {
-  display: none;
-}
