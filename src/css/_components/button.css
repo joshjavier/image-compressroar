@@ -27,7 +27,7 @@
 
   &:hover {
     background-color: color-mix(in srgb, var(--button-color), #000 10%);
-    transition: all 0.2s;
+    transition: all 0.1s;
   }
 
   &.-primary {

@@ -9,8 +9,6 @@ layout: 'layouts/base.webc'
   const imageQueue = document.querySelector('image-queue')
 
   document.addEventListener('filedrop', (e) => {
-    Array.from(e.detail.files).forEach(file => {
-      imageQueue.add(file)
-    })
+    imageQueue.add(e.detail.files)
   })
 </script>

@@ -19,19 +19,6 @@
 
 <ul role="list"></ul>
 
-<!-- With 3 test image cards -->
- <!-- <ul role="list"> -->
-  <!-- <li><image-card></image-card></li> -->
-  <!-- <li><image-card></image-card></li> -->
-  <!-- <li><image-card></image-card></li> -->
-  <!-- <li><image-card></image-card></li> -->
-  <!-- <li><image-card></image-card></li> -->
-  <!-- <li><image-card></image-card></li> -->
-  <!-- <li><image-card></image-card></li> -->
-  <!-- <li><image-card></image-card></li> -->
-  <!-- <li><image-card></image-card></li> -->
- <!-- </ul> -->
-
 <div class="bottom">
   <div class="error"></div>
   <button class="btn -primary download">
@@ -105,7 +92,7 @@
 <script webc:bucket="defer">
   class ImageQueue extends HTMLElement {
     set activecard(val) {
-      if (val === 0) {
+      if (val === null) {
         this.removeAttribute('activecard')
       } else {
         this.setAttribute('activecard', val)
@@ -114,12 +101,6 @@
     get activecard() {
       return Number(this.getAttribute('activecard'))
     }
-    // set length(val) {
-    //   this.setAttribute('length', val)
-    // }
-    // get length() {
-    //   return Number(this.getAttribute('length'))
-    // }
 
     static get observedAttributes() {
       return ['activecard']
@@ -159,11 +140,27 @@
       this.dom.download.addEventListener('click', () => this.download())
     }
 
-    add(file) {
-      const imagecard = new ImageCard(file)
-      const listitem = document.createElement('li')
-      listitem.appendChild(imagecard)
-      this.dom.list.appendChild(listitem)
+    /**
+     * Generate image cards and append to DOM
+     *
+     * @param {...File|File[]|FileList} files
+     */
+    add(...files) {
+      if (Array.isArray(files[0])) {
+        files = files.flat(Infinity)
+      }
+      if (files[0] instanceof FileList) {
+        files = Array.from(files[0])
+      }
+
+      // Append <li>-wrapped <image-card>s to DOM
+      const listItems = files.map(file => {
+        const imageCard = new ImageCard(file)
+        const li = document.createElement('li')
+        li.appendChild(imageCard)
+        return li
+      })
+      this.dom.list.append(...listItems)
 
       // Select the first item if no active card yet
       if (!this.activecard) {
@@ -178,13 +175,14 @@
     clear() {
       if (!this.dom.list.childElementCount)
         return // do nothing if there's nothing to clear
-      this.dom.list.innerHTML = ''
-      this.dom.count.textContent = ''
+      this.activecard = null
+      this.dom.list.replaceChildren()
+      this.dom.count.replaceChildren()
       this.dispatchEvent(new CustomEvent('queueclear', { bubbles: true }))
     }
 
     download() {
-      if (this.dom.list.children.length === 1) {
+      if (this.dom.list.childElementCount === 1) {
         const imagecard = this.dom.list.firstElementChild.firstElementChild
         const link = document.createElement('a')
         link.href = imagecard.data.compressed.url
@@ -213,14 +211,6 @@
       const cards = Array.from(this.dom.list.children).map(li => li.firstElementChild)
       this.activecard = cards.indexOf(el)
     }
-
-    // updateImageCount(n) {
-    //   if (n > 0) {
-    //     this.dom.count.textContent = `${n} images`
-    //   } else {
-    //     this.dom.count.textContent = ''
-    //   }
-    // }
   }
 
   if (!customElements.get('image-queue')) {
