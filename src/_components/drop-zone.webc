@@ -83,7 +83,7 @@
       }
 
       if (e.type === 'change') {
-        fileList = e.files
+        fileList = e.target.files
       }
 
       this.dispatchEvent(new CustomEvent('filedrop', {
