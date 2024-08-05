@@ -2,7 +2,7 @@
   image-card {
     display: flex;
     gap: var(--space-xs);
-    padding: var(--space-2xs);
+    padding: var(--space-xs);
     border: 1px solid transparent;
     font-size: var(--step--2);
     cursor: pointer;
@@ -178,20 +178,20 @@
         sizeOriginal: this.querySelector('.original span'),
       }
 
-      this.addEventListener('pointerdown', (e) => {
-        if (this.dom.button.contains(e.target)) return // prevent redundant clicks
-        this.down = +new Date()
-        this.addEventListener('pointerup', () => {
-          this.up = +new Date()
-          if ((this.up - this.down) < 200) {
-            this.dom.button.click()
-          }
-        }, { once: true })
-      })
+      // this.addEventListener('pointerdown', (e) => {
+      //   if (this.dom.button.contains(e.target)) return // prevent redundant clicks
+      //   this.down = +new Date()
+      //   this.addEventListener('pointerup', () => {
+      //     this.up = +new Date()
+      //     if ((this.up - this.down) < 200) {
+      //       this.dom.button.click()
+      //     }
+      //   }, { once: true })
+      // })
 
-      this.dom.button.addEventListener('click', () => {
-        console.log('button clicked')
-      })
+      // this.dom.button.addEventListener('click', () => {
+      //   console.log('button clicked')
+      // })
 
       if (!this.quality) {
         this.quality = 0.5

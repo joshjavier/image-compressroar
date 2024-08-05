@@ -1,0 +1,229 @@
+<div class="top">
+  <div class="image-count"></div>
+  <div class="buttons">
+    <button class="btn add">
+      <svg class="icon" width="24" height="24" aria-hidden="true" focusable="false">
+        <use href="#icon-add">
+      </svg>
+      Add
+    </button>
+    <input type="file" accept="image/*" multiple style="display: none;">
+    <button class="btn clear">
+      <svg class="icon" width="24" height="24" aria-hidden="true" focusable="false">
+        <use href="#icon-trash">
+      </svg>
+      Clear
+    </button>
+  </div>
+</div>
+
+<ul role="list"></ul>
+
+<!-- With 3 test image cards -->
+ <!-- <ul role="list"> -->
+  <!-- <li><image-card></image-card></li> -->
+  <!-- <li><image-card></image-card></li> -->
+  <!-- <li><image-card></image-card></li> -->
+  <!-- <li><image-card></image-card></li> -->
+  <!-- <li><image-card></image-card></li> -->
+  <!-- <li><image-card></image-card></li> -->
+  <!-- <li><image-card></image-card></li> -->
+  <!-- <li><image-card></image-card></li> -->
+  <!-- <li><image-card></image-card></li> -->
+ <!-- </ul> -->
+
+<div class="bottom">
+  <div class="error"></div>
+  <button class="btn -primary download">
+    <svg class="icon" width="24" height="24" aria-hidden="true" focusable="false">
+      <use href="#icon-download">
+    </svg>
+    Download
+  </button>
+</div>
+
+<style>
+  image-queue {
+    display: flex;
+    flex-direction: column;
+
+    & * { margin: 0; }
+
+    & .top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-2xs);
+      padding: var(--space-2xs);
+      border-bottom: 1px solid var(--color-light-mod-1);
+      /* make this section stick to the top */
+      position: sticky;
+      top: 0;
+      background-color: var(--color-light);
+      z-index: 1;
+
+      & :last-child {
+        margin-left: auto;
+      }
+
+      & .clear:hover {
+        --button-color: var(--color-negative);
+        --text-color: var(--color-light);
+      }
+    }
+
+    & .bottom {
+      display: flex;
+      flex-direction: column;
+      margin-top: auto;
+      /* make this section stick to the bottom */
+      position: sticky;
+      bottom: 0;
+      background-color: var(--color-light);
+
+      & .download {
+        font-size: var(--step-2);
+        font-weight: 700;
+        padding: var(--space-s) var(--space-xl);
+      }
+    }
+
+    &:not([activecard]) .download {
+      display: none; /* hide download button when the queue is empty */
+    }
+
+    & ul {
+      padding-inline-start: 0;
+
+      > * + * {
+        border-top: 1px solid var(--color-light-mod-1);
+      }
+    }
+  }
+</style>
+
+<script webc:bucket="defer">
+  class ImageQueue extends HTMLElement {
+    set activecard(val) {
+      if (val === 0) {
+        this.removeAttribute('activecard')
+      } else {
+        this.setAttribute('activecard', val)
+      }
+    }
+    get activecard() {
+      return Number(this.getAttribute('activecard'))
+    }
+    // set length(val) {
+    //   this.setAttribute('length', val)
+    // }
+    // get length() {
+    //   return Number(this.getAttribute('length'))
+    // }
+
+    static get observedAttributes() {
+      return ['activecard']
+    }
+    attributeChangedCallback(name, oldVal, newVal) {
+      if (!this.dom || !this.dom.list.childElementCount) return
+      switch (name) {
+        case 'activecard':
+          this.dom.list.children[Number(oldVal)].firstElementChild.removeAttribute('aria-current')
+          this.dom.list.children[Number(newVal)].firstElementChild.setAttribute('aria-current', 'true')
+          break
+      }
+    }
+
+    connectedCallback() {
+      this.dom = {
+        list: this.querySelector('[role="list"]'),
+        add: this.querySelector('.btn.add'),
+        input: this.querySelector('input[type="file"]'),
+        clear: this.querySelector('.btn.clear'),
+        download: this.querySelector('.btn.download'),
+        count: this.querySelector('.image-count'),
+      }
+
+      // Select the first item if no active card yet
+      if (this.dom.list.childElementCount && !this.activecard) {
+        this.activecard = 0
+      }
+
+      // Handle clicks on image cards
+      this.addEventListener('pointerdown', this)
+
+      // Handle clicks on action buttons
+      this.dom.clear.addEventListener('click', () => this.clear())
+      this.dom.add.addEventListener('click', () => this.dom.input.click())
+      this.dom.input.addEventListener('change', document.querySelector('drop-zone'))
+      this.dom.download.addEventListener('click', () => this.download())
+    }
+
+    add(file) {
+      const imagecard = new ImageCard(file)
+      const listitem = document.createElement('li')
+      listitem.appendChild(imagecard)
+      this.dom.list.appendChild(listitem)
+
+      // Select the first item if no active card yet
+      if (!this.activecard) {
+        this.activecard = 0
+      }
+
+      // Update image count
+      const imageCount = this.dom.list.childElementCount
+      this.dom.count.textContent = `${imageCount} ${imageCount === 1 ? 'image' : 'images'}`
+    }
+
+    clear() {
+      if (!this.dom.list.childElementCount)
+        return // do nothing if there's nothing to clear
+      this.dom.list.innerHTML = ''
+      this.dom.count.textContent = ''
+      this.dispatchEvent(new CustomEvent('queueclear', { bubbles: true }))
+    }
+
+    download() {
+      if (this.dom.list.children.length === 1) {
+        const imagecard = this.dom.list.firstElementChild.firstElementChild
+        const link = document.createElement('a')
+        link.href = imagecard.data.compressed.url
+        link.download = imagecard.data.file.name
+        link.click()
+      } else {
+        // TODO: download multiple images in a single zip file
+      }
+    }
+
+    handleEvent(e) {
+      if (e.type !== 'pointerdown') return
+      this.down = +new Date()
+      this.addEventListener('pointerup', () => {
+        this.up = +new Date()
+        // only fire selectCard() if event is a "click", not a drag
+        if ((this.up - this.down) < 200) {
+          const imagecard = e.target.closest('image-card')
+          this.selectCard(imagecard)
+        }
+      })
+    }
+
+    selectCard(el) {
+      if (!el) return // do nothing if no card is clicked
+      const cards = Array.from(this.dom.list.children).map(li => li.firstElementChild)
+      this.activecard = cards.indexOf(el)
+    }
+
+    // updateImageCount(n) {
+    //   if (n > 0) {
+    //     this.dom.count.textContent = `${n} images`
+    //   } else {
+    //     this.dom.count.textContent = ''
+    //   }
+    // }
+  }
+
+  if (!customElements.get('image-queue')) {
+    customElements.define('image-queue', ImageQueue)
+  }
+</script>

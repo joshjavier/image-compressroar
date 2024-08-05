@@ -27,6 +27,10 @@ a:not([href]) {
   display: none;
 }
 
+button {
+  font-variation-settings: inherit;
+}
+
 /* @link https://www.sarasoueidan.com/blog/focus-indicators/#a-%E2%80%98universal%E2%80%99-focus-indicator */
 :focus-visible {
   outline: var(--fluid-6-9, 9px) double black;
