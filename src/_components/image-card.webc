@@ -173,25 +173,9 @@
       this.dom = {
         thumbnail: this.querySelector('.thumbnail'),
         filename: this.querySelector('.filename span'),
-        button: this.querySelector('.filename button'),
         sizeCompressed: this.querySelector('.compressed strong'),
         sizeOriginal: this.querySelector('.original span'),
       }
-
-      // this.addEventListener('pointerdown', (e) => {
-      //   if (this.dom.button.contains(e.target)) return // prevent redundant clicks
-      //   this.down = +new Date()
-      //   this.addEventListener('pointerup', () => {
-      //     this.up = +new Date()
-      //     if ((this.up - this.down) < 200) {
-      //       this.dom.button.click()
-      //     }
-      //   }, { once: true })
-      // })
-
-      // this.dom.button.addEventListener('click', () => {
-      //   console.log('button clicked')
-      // })
 
       if (!this.quality) {
         this.quality = 0.5
@@ -220,8 +204,8 @@
     }
 
     onImageLoad() {
-      // Render thumbnail
-      this.dom.thumbnail.innerHTML = this.data.image
+      // Replace loading indicator with thumbnail image
+      this.dom.thumbnail.replaceChildren(this.data.image)
       // Compress image
       this.compressImage()
     }
