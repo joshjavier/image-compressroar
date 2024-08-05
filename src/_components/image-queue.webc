@@ -189,7 +189,14 @@
         link.download = imagecard.data.file.name
         link.click()
       } else {
-        // TODO: download multiple images in a single zip file
+        const zip = new JSZip()
+        for (const li of this.dom.list.children) {
+          const imageCard = li.firstElementChild
+          zip.file(imageCard.data.file.name, imageCard.data.compressed.blob)
+        }
+        zip.generateAsync({ type: 'blob' }).then(blob => {
+          saveAs(blob, 'compressed.zip')
+        })
       }
     }
 
