@@ -173,9 +173,29 @@
       this.dom = {
         thumbnail: this.querySelector('.thumbnail'),
         filename: this.querySelector('.filename span'),
+        button: this.querySelector('.filename button'),
         sizeCompressed: this.querySelector('.compressed strong'),
         sizeOriginal: this.querySelector('.original span'),
       }
+
+      const cardselect = new CustomEvent('cardselect', { bubbles: true })
+      this.addEventListener('pointerdown', (e) => {
+        if (this.dom.button.contains(e.target)) return // prevent redundant clicks
+        this.down = +new Date()
+        this.addEventListener('pointerup', () => {
+          this.up = +new Date()
+          if ((this.up - this.down) < 200) {
+            this.dispatchEvent(cardselect)
+          }
+        }, { once: true })
+      })
+
+      this.dom.button.addEventListener('click', (e) => {
+        e.stopPropagation()
+        const selection = getSelection().toString()
+        if (selection) return // don't fire "cardselect" event when user is doing text selection
+        this.dispatchEvent(cardselect)
+      })
 
       if (!this.quality) {
         this.quality = 0.5

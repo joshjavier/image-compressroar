@@ -131,7 +131,7 @@
       }
 
       // Handle clicks on image cards
-      this.addEventListener('pointerdown', this)
+      this.addEventListener('cardselect', this)
 
       // Handle clicks on action buttons
       this.dom.clear.addEventListener('click', () => this.clear())
@@ -201,16 +201,9 @@
     }
 
     handleEvent(e) {
-      if (e.type !== 'pointerdown') return
-      this.down = +new Date()
-      this.addEventListener('pointerup', () => {
-        this.up = +new Date()
-        // only fire selectCard() if event is a "click", not a drag
-        if ((this.up - this.down) < 200) {
-          const imagecard = e.target.closest('image-card')
-          this.selectCard(imagecard)
-        }
-      })
+      if (e.type !== 'cardselect') return
+      const imagecard = e.target
+      this.selectCard(imagecard)
     }
 
     selectCard(el) {
