@@ -12,6 +12,7 @@
     gap: var(--space-xs, 1em);
     border: 1px solid transparent;
     padding: var(--space-2xs, 1em);
+    position: relative;
     /* padding-right: var(--space-xs); */
     /* border-radius: var(--space-xs); */
     /* width: 500px; */
@@ -80,11 +81,23 @@
     &:hover {
       background-color: var(--color-light-mod-1);
     }
+    &[loading]::after {
+      content: 'compressing...';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-info);
+      color: var(--color-light);
+      display: grid;
+      place-items: center;
+    }
     /* TODO: active state */
   }
 </style>
 
-<script webc:bucket="module">
+<script webc:bucket="defer">
   /**
    * The <image-card> component has the following attributes:
    * - blob
@@ -99,7 +112,6 @@
    *   size="208652"
    * ></image-card>
    */
-  import { bytesToSize } from '../js/utils.js'
 
   /**
    * The ImageCard component takes a File object representing an image, which
@@ -126,6 +138,12 @@
     }
     get valid() {
       return !this.getAttribute('aria-invalid')
+    }
+    set loading(bool) {
+      this.toggleAttribute('loading', bool)
+    }
+    get loading() {
+      return this.hasAttribute('loading')
     }
 
     static get observedAttributes() {
@@ -203,27 +221,40 @@
       reader.readAsDataURL(this.data.file)
     }
 
-    onImageLoad() {
+    async onImageLoad() {
       // Append thumbnail to DOM
       this.dom.thumbnail.appendChild(this.data.image)
       // Compress image
-      this.compressImage()
+      await this.compressImage()
     }
 
     async compressImage() {
-      const offscreenCanvas = new OffscreenCanvas(this.data.image.naturalWidth, this.data.image.naturalHeight)
-      const ctx = offscreenCanvas.getContext('2d')
+      if (this.data.file.type === 'image/png') {
+        this.loading = true
 
-      ctx.drawImage(this.data.image, 0, 0)
-      this.data.compressed.blob = await offscreenCanvas.convertToBlob({
-        // type: this.data.file.type,
-        type: 'image/jpeg',
-        quality: this.quality,
-      })
-      console.log(this.data.compressed.blob)
+        const compressed = await this.optimizePNG()
+        this.data.compressed.blob = new Blob([compressed], { type: 'image/png' })
+        console.log(this.data.compressed.blob)
 
-      this.data.compressed.url = URL.createObjectURL(this.data.compressed.blob)
-      this.dom.sizeCompressed.textContent = bytesToSize(this.data.compressed.blob.size)
+        this.data.compressed.url = URL.createObjectURL(this.data.compressed.blob)
+        this.dom.sizeCompressed.textContent = bytesToSize(this.data.compressed.blob.size)
+
+        this.loading = false
+
+      } else {
+        const offscreenCanvas = new OffscreenCanvas(this.data.image.naturalWidth, this.data.image.naturalHeight)
+        const ctx = offscreenCanvas.getContext('2d')
+
+        ctx.drawImage(this.data.image, 0, 0)
+        this.data.compressed.blob = await offscreenCanvas.convertToBlob({
+          type: this.data.file.type,
+          quality: this.quality,
+        })
+        console.log(this.data.compressed.blob)
+
+        this.data.compressed.url = URL.createObjectURL(this.data.compressed.blob)
+        this.dom.sizeCompressed.textContent = bytesToSize(this.data.compressed.blob.size)
+      }
 
       // size validation
       this.valid = this.data.compressed.blob.size < 102400
@@ -235,6 +266,31 @@
           compressed: this.data.compressed.url,
         },
       }))
+    }
+
+    optimizePNG() {
+      const worker = new Worker('/js/worker.js')
+      const quality = this.quality * 100
+      const min = quality > 30 ? 30 : quality
+      const max = quality < 30 ? 30 : quality
+      const options = {
+        quality: min + '-' + max,
+        // speed: '4',
+      }
+      console.log(options)
+
+      return new Promise((resolve) => {
+        worker.onmessage = (e) => {
+          resolve(e.data.data)
+          worker.terminate()
+        }
+        this.data.file.arrayBuffer().then(buf => {
+          worker.postMessage({
+            file: new Uint8Array(buf),
+            options,
+          })
+        })
+      })
     }
   }
 

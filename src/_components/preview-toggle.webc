@@ -1,4 +1,4 @@
-<script webc:bucket="module">
+<script webc:bucket="defer">
   class PreviewToggle extends HTMLElement {
     set value(val) {
       this.setAttribute('value', val)

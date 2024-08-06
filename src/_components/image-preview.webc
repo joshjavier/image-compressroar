@@ -22,7 +22,7 @@
   }
 </style>
 
-<script webc:bucket="module">
+<script webc:bucket="defer">
   /**
    * The <image-preview> component will render the selected image card,
    * either as an <image-compare> slider or as the compressed version, with

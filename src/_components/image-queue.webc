@@ -44,7 +44,7 @@
   }
 </style>
 
-<script webc:bucket="module">
+<script webc:bucket="defer">
   class ImageQueue extends HTMLElement {
     constructor() {
       super()
@@ -124,6 +124,14 @@
         link.href = imagecard.data.compressed.url
         link.download = imagecard.data.file.name
         link.click()
+      } else {
+        const zip = new JSZip()
+        for (const imageCard of this.dom.listbox.children) {
+          zip.file(imageCard.data.file.name, imageCard.data.compressed.blob)
+        }
+        zip.generateAsync({ type: 'blob' }).then(blob => {
+          saveAs(blob, 'compressed.zip')
+        })
       }
     }
 

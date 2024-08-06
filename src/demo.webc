@@ -3,7 +3,7 @@ layout: 'layouts/base.webc'
 ---
 <div id="app">
   <header>
-    <h1>Image Compressroar Demo</h1>
+    <h1>Image Compressroar v0.3</h1>
   </header>
 
   <main class="with-sidebar">

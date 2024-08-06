@@ -89,7 +89,7 @@
   }
 </style>
 
-<script webc:bucket="module">
+<script webc:bucket="defer">
   /**
    * The drop zone adds images to the image queue, whic is then used by the
    * <image-queue> component to render the <image-card>s that represent the
