@@ -1,13 +1,13 @@
 import '@cloudfour/image-compare'
 import './_components/spinner.js'
+import { ImageCard } from './_components/image-card.js'
 // import "./slider.js"
 // import "./compress.js"
 
 import JSZip from 'jszip'
 import { saveAs } from "file-saver"
-import { bytesToSize } from "./_utils.js"
 
 // Make imports accessible in global scope
 window.JSZip = JSZip
 window.saveAs = saveAs
-window.bytesToSize = bytesToSize
+window.ImageCard = ImageCard

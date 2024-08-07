@@ -1,0 +1,108 @@
+image-card {
+  display: flex;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  border: 1px solid transparent;
+  font-size: var(--step--2);
+  cursor: pointer;
+  position: relative;
+
+  &:focus-within {
+    outline: var(--fluid-6-9, 9px) double black;
+    box-shadow: 0 0 0 var(--fluid-4-6, 6px) white;
+  }
+
+  & * { margin: 0; }
+
+  & .thumbnail {
+    width: var(--space-2xl);
+    height: var(--space-2xl);
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    background-color: var(--color-light-mod-1);
+    border-radius: 4px;
+
+    > img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    > :not(img) {
+      opacity: 50%;
+    }
+  }
+
+  & .text {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    & .filename {
+      & button {
+        /* clear default button styles */
+        border: none;
+        background-color: transparent;
+        text-align: left;
+        padding: 0;
+        font: inherit;
+        color: inherit;
+        cursor: inherit;
+        user-select: auto; /* allow user to include filename in text selection */
+
+        &:focus-visible {
+          outline: none;
+          box-shadow: unset;
+        }
+      }
+
+      & span {
+        overflow-wrap: anywhere; /* force line break to prevent overflowing */
+        /* limit to 2 lines */
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+                line-clamp: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    & .details {
+      display: flex;
+      align-items: center;
+      gap: var(--space-s);
+      justify-content: space-between;
+
+      & .size .original {
+        opacity: 70%;
+      }
+    }
+  }
+
+  /* Validation icons */
+  &[aria-invalid] .icon-success {
+    display: none;
+  }
+  &:not([aria-invalid]) .icon-failure {
+    display: none;
+  }
+
+  /* States */
+  &:hover {
+    background-color: var(--color-light-mod-1);
+  }
+
+  & .loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-light);
+    display: grid;
+    place-items: center;
+  }
+}
