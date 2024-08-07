@@ -1,4 +1,5 @@
 import '@cloudfour/image-compare'
+import './_components/spinner.js'
 // import "./slider.js"
 // import "./compress.js"
 

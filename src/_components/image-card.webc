@@ -6,6 +6,7 @@
     border: 1px solid transparent;
     font-size: var(--step--2);
     cursor: pointer;
+    position: relative;
 
     &:focus-within {
       outline: var(--fluid-6-9, 9px) double black;
@@ -94,6 +95,17 @@
     &:hover {
       background-color: var(--color-light-mod-1);
     }
+
+    & .loading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-light);
+      display: grid;
+      place-items: center;
+    }
   }
 </style>
 
@@ -115,6 +127,20 @@
     }
     get valid() {
       return !this.getAttribute('aria-invalid')
+    }
+    set loading(bool) {
+      if (bool) {
+        const spinner = document.createElement('div')
+        spinner.classList.add('loading')
+        spinner.innerHTML = '<lds-spinner></lds-spinner>'
+        this.appendChild(spinner)
+      } else {
+        const spinner = this.querySelector('.loading')
+        if (spinner) spinner.remove()
+      }
+    }
+    get loading() {
+      return this.querySelector('.loading')
     }
 
     static get observedAttributes() {
@@ -184,7 +210,7 @@
         this.down = +new Date()
         this.addEventListener('pointerup', () => {
           this.up = +new Date()
-          if ((this.up - this.down) < 200) {
+          if ((this.up - this.down) < 200 && !this.loading) {
             this.dispatchEvent(cardselect)
           }
         }, { once: true })
@@ -193,7 +219,8 @@
       this.dom.button.addEventListener('click', (e) => {
         e.stopPropagation()
         const selection = getSelection().toString()
-        if (selection) return // don't fire "cardselect" event when user is doing text selection
+        if (selection || this.loading)
+          return // don't fire "cardselect" event when user is doing text selection or card is loading
         this.dispatchEvent(cardselect)
       })
 
@@ -231,19 +258,32 @@
     }
 
     async compressImage() {
-      const offscreenCanvas = new OffscreenCanvas(this.data.image.naturalWidth, this.data.image.naturalHeight)
-      const ctx = offscreenCanvas.getContext('2d')
+      if (this.data.file.type === 'image/png') {
+        this.loading = true
 
-      ctx.drawImage(this.data.image, 0, 0)
-      this.data.compressed.blob = await offscreenCanvas.convertToBlob({
-        // type: this.data.file.type,
-        type: 'image/jpeg',
-        quality: this.quality,
-      })
-      console.log(this.data.compressed.blob)
+        const compressed = await this.optimizePNG()
+        this.data.compressed.blob = new Blob([compressed], { type: 'image/png' })
+        console.log(this.data.compressed.blob)
 
-      this.data.compressed.url = URL.createObjectURL(this.data.compressed.blob)
-      this.dom.sizeCompressed.textContent = bytesToSize(this.data.compressed.blob.size)
+        this.data.compressed.url = URL.createObjectURL(this.data.compressed.blob)
+        this.dom.sizeCompressed.textContent = bytesToSize(this.data.compressed.blob.size)
+
+        this.loading = false
+
+      } else {
+        const offscreenCanvas = new OffscreenCanvas(this.data.image.naturalWidth, this.data.image.naturalHeight)
+        const ctx = offscreenCanvas.getContext('2d')
+
+        ctx.drawImage(this.data.image, 0, 0)
+        this.data.compressed.blob = await offscreenCanvas.convertToBlob({
+          type: this.data.file.type, // must be image/jpeg or image/webp
+          quality: this.quality,
+        })
+        console.log(this.data.compressed.blob)
+
+        this.data.compressed.url = URL.createObjectURL(this.data.compressed.blob)
+        this.dom.sizeCompressed.textContent = bytesToSize(this.data.compressed.blob.size)
+      }
 
       // validate if compressed blob size is less than 100 KB
       this.valid = this.data.compressed.blob.size < 102400
@@ -255,6 +295,31 @@
           compressed: this.data.compressed.url,
         },
       }))
+    }
+
+    optimizePNG() {
+      const worker = new Worker('/js/worker.js')
+      const quality = this.quality * 100
+      const min = quality < 15 ? 0 : quality - 15
+      const max = quality > 85 ? 100 : quality + 15
+      const options = {
+        quality: min + '-' + max,
+        // speed: '4',
+      }
+      console.log(options)
+
+      return new Promise((resolve, reject) => {
+        worker.onmessage = (e) => {
+          resolve(e.data.data)
+          worker.terminate()
+        }
+        this.data.file.arrayBuffer().then(buf => {
+          worker.postMessage({
+            file: new Uint8Array(buf),
+            options,
+          })
+        })
+      })
     }
   }
 
