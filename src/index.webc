@@ -1,14 +1,131 @@
 ---
 layout: 'layouts/base.webc'
 ---
-<drop-zone></drop-zone>
-<image-card></image-card>
-<image-queue></image-queue>
+<div id="app">
+  <drop-zone></drop-zone>
+
+  <header>
+    <h1>Image Compressroar</h1>
+  </header>
+
+  <main class="with-sidebar">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <image-queue></image-queue>
+    </div>
+
+    <!-- Main panel -->
+    <div class="main-panel">
+
+      <!-- Options bar -->
+      <div class="options-bar cluster">
+        <quality-slider></quality-slider>
+        <preview-toggle></preview-toggle>
+      </div>
+
+      <!-- Image preview -->
+      <div class="full-image cover">
+        <div class="center">
+          <image-preview></image-preview>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- <footer></footer> -->
+</div>
+
+<style>
+  #app {
+    --header-size: 60px;
+    --sidebar-width: 30rem;
+
+    > header {
+      padding: 10px;
+      height: var(--header-size);
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--color-light-mod-2);
+
+      & * { margin: 0; }
+
+      & h1 {
+        font-size: var(--step-1);
+        text-transform: uppercase;
+        font-stretch: semi-condensed;
+      }
+    }
+
+    > main {
+      height: calc(100vh - var(--header-size));
+
+      > .sidebar {
+        border-right: 1px solid var(--color-light-mod-2);
+        /* make sidebar scrollable if there's a lot of items */
+        height: 100%;
+        overflow-y: auto;
+
+        > image-queue {
+          min-height: 100%; /* fill the available vertical space so the download button is flush at the bottom */
+        }
+      }
+
+      > .main-panel {
+        height: 100%; /* we need to set an explicit width to make the `.full-image` div scrollable for large images */
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    & .options-bar {
+      border-bottom: 1px solid var(--color-light-mod-2);
+      padding: var(--space-2xs);
+      justify-content: space-between;
+    }
+
+    & .full-image {
+      height: 100%;
+      overflow-y: auto;
+    }
+  }
+</style>
 
 <script webc:bucket="defer">
+  const imagePreview = document.querySelector('image-preview')
   const imageQueue = document.querySelector('image-queue')
+  const previewToggle = document.querySelector('preview-toggle')
+  const qualitySlider = document.querySelector('quality-slider')
 
   document.addEventListener('filedrop', (e) => {
     imageQueue.add(e.detail.files)
   })
+
+  document.addEventListener('cardselect', (e) => {
+    const original = e.target.data.image.src
+    const compressed = e.target.data.compressed.url
+    imagePreview.sources = [original, compressed]
+    qualitySlider.value = e.target.quality
+  })
+
+  document.addEventListener('queueclear', () => {
+    imagePreview.sources = ['', '']
+  })
+
+  document.addEventListener('previewtoggle', (e) => {
+    imagePreview.mode = e.target.value
+  })
+
+  document.addEventListener('qualitychange', debounce(
+    function (e) {
+      const current = document.querySelector('[aria-current="true"]')
+      if (current) {
+        current.quality = e.target.value
+        current.addEventListener('imagecompress', (e) => {
+          imagePreview.sources = [e.detail.original, e.detail.compressed]
+        }, { once: true })
+      }
+    },
+    500 // wait 500ms before compressing the image to improve performance
+  ))
 </script>
