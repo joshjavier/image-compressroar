@@ -125,11 +125,6 @@
         count: this.querySelector('.image-count'),
       }
 
-      // Select the first item if no active card yet
-      if (this.dom.list.childElementCount && !this.activecard) {
-        this.activecard = 0
-      }
-
       // Handle clicks on image cards
       this.addEventListener('cardselect', this)
 
@@ -164,7 +159,10 @@
 
       // Select the first item if no active card yet
       if (!this.activecard) {
-        this.activecard = 0
+        const first = this.querySelector('image-card')
+        first.addEventListener('imagecompress', () => {
+          first.dom.button.click()
+        }, { once: true })
       }
 
       // Update image count
