@@ -1,7 +1,7 @@
 :root {
   /* Typography ---------------------------------------- */
 
-  --text-sans: 'Roboto Flex', Inter, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
+  --text-sans: Bahnschrift, 'DIN Alternate', 'Franklin Gothic Medium', 'Nimbus Sans Narrow', sans-serif-condensed, sans-serif;
   --text-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
   --measure: 60ch;
 
