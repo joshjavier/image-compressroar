@@ -189,7 +189,7 @@ export class ImageCard extends HTMLElement {
 
   optimizePNG() {
     const worker = new Worker('/js/worker.js')
-    const quality = this.quality * 100
+    const quality = Math.round(this.quality * 100)
     const min = quality < 15 ? 0 : quality - 15
     const max = quality > 85 ? 100 : quality + 15
     const options = {
