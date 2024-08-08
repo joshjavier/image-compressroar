@@ -10,7 +10,7 @@ layout: 'layouts/base.webc'
 
   <main class="with-sidebar">
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" tabindex="-1">
       <image-queue></image-queue>
     </div>
 
@@ -24,7 +24,7 @@ layout: 'layouts/base.webc'
       </div>
 
       <!-- Image preview -->
-      <div class="full-image cover">
+      <div class="full-image cover bleed">
         <div class="center">
           <image-preview></image-preview>
         </div>

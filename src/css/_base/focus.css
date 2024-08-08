@@ -1,0 +1,21 @@
+/* @link https://www.sarasoueidan.com/blog/focus-indicators/#a-%E2%80%98universal%E2%80%99-focus-indicator */
+:focus-visible {
+  outline: var(--fluid-6-9, 9px) double black;
+  box-shadow: 0 0 0 var(--fluid-4-6, 6px) white;
+
+  &.bleed {
+    outline-offset: calc(-1 * var(--fluid-6-9, 9px));
+    box-shadow: inset 0 0 0 var(--fluid-4-6, 6px) white;
+  }
+
+  /* prevent cases where focus ring is hidden behind adjacent elements */
+  &.btn {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.bleed:focus-within {
+  outline-offset: calc(-1 * var(--fluid-6-9, 9px));
+  box-shadow: inset 0 0 0 var(--fluid-4-6, 6px) white;
+}

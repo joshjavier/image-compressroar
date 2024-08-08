@@ -85,6 +85,7 @@ export class ImageCard extends HTMLElement {
         </div>
       </div>
     `
+    this.classList.add('bleed')
 
     this.dom = {
       thumbnail: this.querySelector('.thumbnail'),

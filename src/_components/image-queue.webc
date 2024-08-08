@@ -21,7 +21,7 @@
 
 <div class="bottom">
   <div class="error"></div>
-  <button class="btn -primary download">
+  <button class="btn -primary download bleed">
     <svg class="icon" width="24" height="24" aria-hidden="true" focusable="false">
       <use href="#icon-download">
     </svg>

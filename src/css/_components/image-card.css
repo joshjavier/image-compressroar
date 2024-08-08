@@ -7,11 +7,6 @@ image-card {
   cursor: pointer;
   position: relative;
 
-  &:focus-within {
-    outline: var(--fluid-6-9, 9px) double black;
-    box-shadow: 0 0 0 var(--fluid-4-6, 6px) white;
-  }
-
   & * { margin: 0; }
 
   & .thumbnail {
@@ -93,6 +88,14 @@ image-card {
   /* States */
   &:hover {
     background-color: var(--color-light-mod-1);
+  }
+
+  &:focus-within {
+    outline: var(--fluid-6-9, 9px) double black;
+  }
+
+  &[aria-current="true"] {
+    background-color: var(--color-primary-tint);
   }
 
   & .loading {
