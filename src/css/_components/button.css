@@ -16,6 +16,7 @@
 .btn {
   --button-color: var(--color-light-mod-1);
   --text-color: var(--color-dark);
+  display: inline-block;
   cursor: pointer;
   border: 1px solid transparent;
   padding: var(--space-2xs) var(--space-s);
