@@ -1,0 +1,74 @@
+<form>
+  <fieldset role="radiogroup">
+    <legend>Preview Mode</legend>
+    <label>
+      <input type="radio" name="preview" value="slider">
+      <span>Slider</span>
+    </label>
+    <label>
+      <input type="radio" name="preview" value="reveal">
+      <span>Tap-to-reveal</span>
+    </label>
+  </fieldset>
+</form>
+
+<script webc:bucket="defer">
+  /**
+   * This class defines a custom <preview-toggle> element that allows the user
+   * to switch between two preview modes: slider and tap-to-reveal.
+   *
+   * It fires a "previewtoggle" custom bubbling event whenever the internal
+   * radio button changes value. Ideally, you'll listen to this event in the
+   * root of your app to update the <image-preview> component so its `mode`
+   * reflects the `value` of this element.
+   */
+  class PreviewToggle extends HTMLElement {
+    set value(val) {
+      this.setAttribute('value', val)
+    }
+    get value() {
+      return this.getAttribute('value')
+    }
+
+    static get observedAttributes() {
+      return ['value']
+    }
+    attributeChangedCallback(name, oldVal, newVal) {
+      if (!this.dom) return
+      switch (name) {
+        case 'value':
+          this.updateDOM()
+          break
+      }
+    }
+
+    connectedCallback() {
+      if (!this.value) {
+        this.value = 'slider'
+      }
+
+      this.dom = {
+        form: this.querySelector('form'),
+      }
+
+      this.data = {
+        radiogroup: this.dom.form.elements['preview'],
+      }
+
+      this.addEventListener('change', (e) => {
+        this.value = this.data.radiogroup.value
+        this.dispatchEvent(new CustomEvent('previewtoggle', { bubbles: true }))
+      })
+
+      this.updateDOM()
+    }
+
+    updateDOM() {
+      this.data.radiogroup.value = this.value
+    }
+  }
+
+  if (!customElements.get('preview-toggle')) {
+    customElements.define('preview-toggle', PreviewToggle)
+  }
+</script>
