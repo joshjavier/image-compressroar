@@ -14,6 +14,10 @@
     background-size: 16px 16px;
     background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
 
+    &:not([loaded]) > image-compare {
+      display: none; /* don't display if empty to prevent additional tab stop */
+    }
+
     > img {
       height: 100%;
       width: 100%;
@@ -51,6 +55,12 @@
       this.data.original = val[0]
       this.data.compressed = val[1]
       this.updateSources()
+
+      if (val.every(item => item)) {
+        this.toggleAttribute('loaded', true)
+      } else {
+        this.removeAttribute('loaded')
+      }
     }
     get sources() {
       return Object.values(this.data)

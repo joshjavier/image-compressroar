@@ -1,13 +1,7 @@
 <div class="top">
   <div class="image-count"></div>
   <div class="buttons">
-    <button class="btn add">
-      <svg class="icon" width="24" height="24" aria-hidden="true" focusable="false">
-        <use href="#icon-add">
-      </svg>
-      Add
-    </button>
-    <input type="file" accept="image/*" multiple style="display: none;">
+    <filepicker-toggle type="button" label="Add"></filepicker-toggle>
     <button class="btn clear">
       <svg class="icon" width="24" height="24" aria-hidden="true" focusable="false">
         <use href="#icon-trash">
@@ -111,8 +105,6 @@
     connectedCallback() {
       this.dom = {
         list: this.querySelector('[role="list"]'),
-        add: this.querySelector('.btn.add'),
-        input: this.querySelector('input[type="file"]'),
         clear: this.querySelector('.btn.clear'),
         download: this.querySelector('.btn.download'),
         count: this.querySelector('.image-count'),
@@ -123,8 +115,6 @@
 
       // Handle clicks on action buttons
       this.dom.clear.addEventListener('click', () => this.clear())
-      this.dom.add.addEventListener('click', () => this.dom.input.click())
-      this.dom.input.addEventListener('change', document.querySelector('drop-zone'))
       this.dom.download.addEventListener('click', () => this.download())
     }
 
