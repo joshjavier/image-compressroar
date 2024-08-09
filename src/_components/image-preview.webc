@@ -1,10 +1,18 @@
 <style>
   image-preview {
+    --fill: var(--color-light-mod-2);
     display: flex;
     flex-direction: column;
     margin: 0;
     overflow: hidden;
     position: relative;
+    /* checkered pattern background to indicate transparency */
+    background-image: linear-gradient(45deg, var(--fill) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--fill) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--fill) 75%),
+      linear-gradient(-45deg, #fff 75%, var(--fill) 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
 
     > img {
       height: 100%;
@@ -71,7 +79,7 @@
 
     connectedCallback() {
       if (!this.mode) {
-        this.mode = 'slider' // set to 'pointerdown' for tap-and-hold preview
+        this.mode = 'slider' // set to 'reveal' for tap-and-hold preview
       }
 
       this.render()

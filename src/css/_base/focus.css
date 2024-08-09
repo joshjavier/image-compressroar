@@ -16,6 +16,8 @@
 }
 
 .bleed:focus-within {
-  outline-offset: calc(-1 * var(--fluid-6-9, 9px));
-  box-shadow: inset 0 0 0 var(--fluid-4-6, 6px) white;
+  &:where(image-card) {
+    outline-offset: calc(-1 * var(--fluid-6-9, 9px));
+    box-shadow: inset 0 0 0 var(--fluid-4-6, 6px) white;
+  }
 }

@@ -87,6 +87,7 @@ layout: 'layouts/base.webc'
     & .full-image {
       height: 100%;
       overflow-y: auto;
+      background-color: var(--canvas-color, var(--color-dark));
     }
   }
 </style>
