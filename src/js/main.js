@@ -1,5 +1,6 @@
 import '@cloudfour/image-compare'
 import './_components/spinner.js'
+import './_components/filepicker-toggle.js'
 import { ImageCard } from './_components/image-card.js'
 import { debounce } from "./_utils.js"
 // import "./slider.js"
