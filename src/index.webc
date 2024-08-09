@@ -10,7 +10,7 @@ layout: 'layouts/base.webc'
 
   <main class="with-sidebar">
     <!-- Sidebar -->
-    <div class="sidebar" tabindex="-1">
+    <div class="sidebar">
       <image-queue></image-queue>
     </div>
 
@@ -62,17 +62,11 @@ layout: 'layouts/base.webc'
 
       > .sidebar {
         border-right: 1px solid var(--color-light-mod-2);
-        /* make sidebar scrollable if there's a lot of items */
-        height: 100%;
-        overflow-y: auto;
-
-        > image-queue {
-          min-height: 100%; /* fill the available vertical space so the download button is flush at the bottom */
-        }
+        height: 100%; /* we need to set an explicit height to make the `<image-queue>` scrollable items overflow */
       }
 
       > .main-panel {
-        height: 100%; /* we need to set an explicit width to make the `.full-image` div scrollable for large images */
+        height: 100%; /* we need to set an explicit height to make the `.full-image` div scrollable for large images */
         display: flex;
         flex-direction: column;
       }
