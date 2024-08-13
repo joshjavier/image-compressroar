@@ -29,12 +29,12 @@
    *
    * If you want to specify a visual block to be the drop zone, you can do so
    * by adding child elements like an instructional label ("Drop images here")
-   * or an `<input type="file>` with the `onchange` attribute set to this
-   * element.
+   * or an `<input type="file>`.
    *
    * To associate an input with the dropzone, add an event listener to the
    * input element for the "change" event and set the callback parameter to
-   * the <drop-zone> element.
+   * the <drop-zone> element. You can also use the <filepicker-toggle> custom
+   * element for convenience.
    *
    * It adds the "dropzone:highlight" class to the document body or itself;
    * use it to add your own styles for the highlight effect on dragover.
