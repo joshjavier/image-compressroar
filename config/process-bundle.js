@@ -9,7 +9,7 @@ export default async function (content) {
   if (this.type === 'css') {
     let result = cssTransform({
       code: Buffer.from(content),
-      // minify: true,
+      minify: true,
       targets,
     })
     return result.code
@@ -17,7 +17,8 @@ export default async function (content) {
 
   if (this.type === 'js') {
     let result = await jsTransform(content, {
-      // minify: true,
+      minify: true,
+      format: 'esm',
     })
     return result.code
   }
