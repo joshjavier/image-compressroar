@@ -142,12 +142,18 @@ layout: 'layouts/base.webc'
   document.addEventListener('qualitychange', debounce(
     function (e) {
       const current = document.querySelector('[aria-current="true"]')
-      if (current) {
-        current.quality = e.target.value
-        current.addEventListener('imagecompress', (e) => {
-          imagePreview.sources = [e.detail.original, e.detail.compressed]
-        }, { once: true })
-      }
+
+      if (!current) return // don't do anything if no card is selected
+
+      current.quality = e.target.value
+      current.addEventListener('imagecompress', (e) => {
+        const newCurrent = document.querySelector('[aria-current="true"]')
+
+        // if the user didn't select a new card, update the image preview
+        if (current === newCurrent) {
+          current.dom.button.click()
+        }
+      }, { once: true })
     },
     500 // wait 500ms before compressing the image to improve performance
   ))
