@@ -5,7 +5,6 @@ image-card {
   border: 1px solid transparent;
   font-size: var(--step--2);
   cursor: pointer;
-  position: relative;
 
   & * { margin: 0; }
 
@@ -15,7 +14,6 @@ image-card {
     flex-shrink: 0;
     display: grid;
     place-items: center;
-    background-color: var(--color-light-mod-1);
     border-radius: 4px;
 
     > img {
@@ -74,6 +72,18 @@ image-card {
       & .size .original {
         opacity: 70%;
       }
+
+      /* show loading indicator when size is empty */
+      & .size .compressed :empty::after {
+        content: '';
+        display: inline-block;
+        transform: translateY(3px); /* optical alignment */
+        height: 1em;
+        aspect-ratio: 4;
+        background: radial-gradient(circle closest-side,var(--color-light-mod-2) 90%,transparent) 0/calc(100%/3) 100% space;
+        clip-path: inset(0 100% 0 0);
+        animation: l1 1s steps(4) infinite;
+      }
     }
   }
 
@@ -96,16 +106,5 @@ image-card {
 
   &[aria-current="true"] {
     background-color: var(--color-primary-tint);
-  }
-
-  & .loading {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--color-light);
-    display: grid;
-    place-items: center;
   }
 }

@@ -21,16 +21,16 @@ export class ImageCard extends HTMLElement {
   set loading(bool) {
     if (bool) {
       const spinner = document.createElement('div')
-      spinner.classList.add('loading')
-      spinner.innerHTML = '<lds-spinner></lds-spinner>'
-      this.appendChild(spinner)
+      spinner.classList.add('spinner')
+      this.dom.thumbnail.replaceChildren(spinner) // replace thumbnail with spinner
+      this.dom.sizeCompressed.replaceChildren('') // replace compressed size with loader
     } else {
-      const spinner = this.querySelector('.loading')
-      if (spinner) spinner.remove()
+      // Replace loading indicator with thumbnail image
+      this.dom.thumbnail.replaceChildren(this.data.image)
     }
   }
   get loading() {
-    return this.querySelector('.loading')
+    return this.querySelector('.spinner')
   }
 
   static get observedAttributes() {
@@ -62,9 +62,7 @@ export class ImageCard extends HTMLElement {
 
   connectedCallback() {
     this.innerHTML = `
-      <div class="thumbnail">
-        <div class="loader"></div>
-      </div>
+      <div class="thumbnail"></div>
       <div class="text">
         <h3 class="filename">
           <button>
@@ -73,8 +71,8 @@ export class ImageCard extends HTMLElement {
         </h3>
         <div class="details">
           <div class="size">
-            <p class="compressed">Size: <strong>98.72 KB</strong></p>
-            <p class="original">Original: <span>203 KB</span></p>
+            <p class="compressed">Size: <strong></strong></p>
+            <p class="original">Original: <span></span></p>
           </div>
           <svg class="icon icon-success" width="24" height="24">
             <use href="#check-solid">
@@ -142,24 +140,22 @@ export class ImageCard extends HTMLElement {
   }
 
   onImageLoad() {
-    // Replace loading indicator with thumbnail image
-    this.dom.thumbnail.replaceChildren(this.data.image)
+    // // Replace loading indicator with thumbnail image
+    // this.dom.thumbnail.replaceChildren(this.data.image)
     // Compress image
     this.compressImage()
   }
 
   async compressImage() {
-    if (this.data.file.type === 'image/png') {
-      this.loading = true
+    this.loading = true // start compression
 
+    if (this.data.file.type === 'image/png') {
       const compressed = await this.optimizePNG()
       this.data.compressed.blob = new Blob([compressed], { type: 'image/png' })
       console.log(this.data.compressed.blob)
 
       this.data.compressed.url = URL.createObjectURL(this.data.compressed.blob)
       this.dom.sizeCompressed.textContent = bytesToSize(this.data.compressed.blob.size)
-
-      this.loading = false
 
     } else {
       const offscreenCanvas = new OffscreenCanvas(this.data.image.naturalWidth, this.data.image.naturalHeight)
@@ -175,6 +171,8 @@ export class ImageCard extends HTMLElement {
       this.data.compressed.url = URL.createObjectURL(this.data.compressed.blob)
       this.dom.sizeCompressed.textContent = bytesToSize(this.data.compressed.blob.size)
     }
+
+    this.loading = false // end compression
 
     // validate if compressed blob size is less than 100 KB
     this.valid = this.data.compressed.blob.size < 102400

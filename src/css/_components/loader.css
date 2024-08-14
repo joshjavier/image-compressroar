@@ -1,45 +1,24 @@
-/* @link https://cssloaders.github.io */
+/* #1 at https://css-loaders.com/dots */
 .loader {
-  width: 64px;
-  height: 64px;
-  position: relative;
-  background: transparent;
-  border-radius: 4px;
-  overflow: hidden;
+  width: 60px;
+  aspect-ratio: 4;
+  background: radial-gradient(circle closest-side,#000 90%,#0000) 0/calc(100%/3) 100% space;
+  clip-path: inset(0 100% 0 0);
+  animation: l1 1s steps(4) infinite;
 }
-.loader:before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 40px;
-  height: 40px;
-  transform: rotate(45deg) translate(30%, 40%);
-  background: #ff9371;
-  box-shadow: 32px -34px 0 5px #ff3d00;
-  animation: slide 2s infinite ease-in-out alternate;
-}
-.loader:after {
-  content: "";
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #ff3d00;
-  transform: rotate(0deg);
-  transform-origin: 35px 145px;
-  animation: rotate 2s infinite ease-in-out;
-}
+@keyframes l1 {to{clip-path: inset(0 -34% 0 0)}}
 
-@keyframes slide {
-  0% , 100%{ bottom: -35px}
-  25% , 75%{ bottom: -2px}
-  20% , 80%{ bottom: 2px}
+/* #13 at https://css-loaders.com/spinner */
+.spinner {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(farthest-side,#ffa516 94%,#0000) top/8px 8px no-repeat,
+    conic-gradient(#0000 30%,#ffa516);
+  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
+  animation: l13 1s infinite linear;
 }
-@keyframes rotate {
-  0% { transform: rotate(-15deg)}
-  25% , 75%{ transform: rotate(0deg)}
-  100% {  transform: rotate(25deg)}
+@keyframes l13{
+  100%{transform: rotate(1turn)}
 }
