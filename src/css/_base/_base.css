@@ -1,0 +1,31 @@
+@import "reset.css";
+/* @import "fonts.css"; */
+@import "root.css";
+@import "focus.css";
+
+body {
+  margin: 0;
+  font-family: var(--text-sans);
+  background-color: var(--color-sheet, var(--color-light));
+  color: var(--color-text, var(--color-dark));
+  font-size: var(--step-0);
+  letter-spacing: -0.2px;
+}
+
+/**
+ * Improve text readability by
+ * 1. imposing a decent line length
+ * 2. preventing orphans at the last line of text
+ */
+:where(p, h1, h2, h3, h4, h5, h6, li) {
+  max-width: var(--measure); /* 1 */
+  text-wrap: pretty; /* 2 */
+}
+
+a:not([href]) {
+  display: none;
+}
+
+button {
+  font-stretch: inherit;
+}

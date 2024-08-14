@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compressroar</title>
+
+    <!-- Styles -->
+    <link webc:keep rel="stylesheet" href="/css/main.css">
+    <style webc:keep @raw="getBundle('css')"></style>
+
+    <!-- Scripts, deferred until the DOM is ready -->
+    <script webc:keep type="module" src="/js/main.js"></script>
+    <script webc:keep type="module" :src="getBundleFileUrl('js', 'defer')"></script>
+  </head>
+  <body>
+    <svg-sprite></svg-sprite>
+    <template webc:nokeep @raw="content"></template>
+  </body>
+</html>

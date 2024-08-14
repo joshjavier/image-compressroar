@@ -1,0 +1,13 @@
+.link {
+  display: inline;
+  text-decoration: underline;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  color: inherit;
+  cursor: pointer;
+
+  &.-primary {
+    color: var(--color-primary);
+  }
+}

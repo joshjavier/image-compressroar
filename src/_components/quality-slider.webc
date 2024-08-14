@@ -1,0 +1,164 @@
+<template webc:root class="cluster">
+  <label for="quality">Quality:</label>
+  <div class="range-slider">
+    <input type="range" id="quality" min="0" max="1" step="0.01">
+    <div class="slider" aria-hidden="true">
+      <div class="thumb"></div>
+    </div>
+  </div>
+</template>
+
+<style>
+  .range-slider {
+    --thumb-aspect-ratio: 1.7;
+    --thumb-border-radius: 9999em;
+
+    max-width: var(--slider-max-width, 100%);
+    width: var(--slider-width, 20rem);
+    height: var(--slider-height, 2rem);
+    position: relative;
+
+    > .slider {
+      height: 100%;
+      border-radius: var(--thumb-border-radius);
+
+      /* Slider track */
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        height: var(--track-height, 6px);
+        border-radius: 9999em;
+        border: 1px solid transparent;
+        background-color: var(--color-light-mod-1);
+      }
+
+      > .thumb {
+        height: 100%;
+        aspect-ratio: var(--thumb-aspect-ratio);
+        position: absolute;
+
+        &::before {
+          content: attr(text);
+          display: grid;
+          place-items: center;
+          border: 2px solid transparent;
+          border-radius: var(--thumb-border-radius);
+          background-color: var(--color-primary);
+          color: var(--color-light);
+          font-size: var(--step--1);
+          font-weight: 300;
+
+          margin: var(--thumb-margin);
+          height: calc(100% - 2 * var(--thumb-margin, 0px));
+          width: calc(100% - 2 * var(--thumb-margin, 0px));
+        }
+      }
+    }
+
+    /* Translate hover/focus styles to the custom slider */
+    > input[type="range"]:focus-visible + .slider {
+      outline: var(--fluid-6-9, 9px) double black;
+      box-shadow: 0 0 0 var(--fluid-4-6, 6px) white;
+    }
+
+    > input[type="range"]:disabled + .slider {
+      opacity: 0.3;
+    }
+
+    /* Visually hide the native range input */
+    > input[type="range"] {
+      -webkit-appearance: none;
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      z-index: 1;
+      opacity: 0;
+
+      /* Make sure the custom thumb is aligned with the native range input thumb for screen reader focus indicators */
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: var(--slider-height, 2rem);
+        width: calc(var(--slider-height, 2rem) * var(--thumb-aspect-ratio)); /* workaround since aspect-ratio doesn't work here */
+      }
+      &::-moz-range-thumb {
+        box-sizing: border-box;
+        height: var(--slider-height, 2rem);
+        width: calc(var(--slider-height, 2rem) * var(--thumb-aspect-ratio)); /* workaround since aspect-ratio doesn't work here */
+      }
+    }
+  }
+</style>
+
+<script webc:bucket="defer">
+  class QualitySlider extends HTMLElement {
+    set value(val) {
+      this.setAttribute('value', val)
+      this.dom.thumb.setAttribute('text', Math.round(val * 100) + '%')
+      // Math.round handles cases like 0.14 -> 14.000000000000002 and
+      // 0.29 -> 28.999999999999996 due to the way JavaScript does math 🤷
+    }
+    get value() {
+      return this.getAttribute('value')
+    }
+
+    static get observedAttributes() {
+      return ['value']
+    }
+    attributeChangedCallback(name, oldVal, newVal) {
+      if (!this.dom) return
+      switch (name) {
+        // update internal slider when quality attr is changed programmatically
+        case 'value':
+          this.dom.range.value = newVal
+          this.updateSlider()
+          break
+      }
+    }
+
+    connectedCallback() {
+      this.dom = {
+        range: this.querySelector('input[type="range"]'),
+        slider: this.querySelector('.slider'),
+        thumb: this.querySelector('.thumb'),
+      }
+
+      for (const type of ['input', 'change']) {
+        this.dom.range.addEventListener(type, (e) => {
+          this.updateSlider()
+          this.value = e.target.value
+          this.dispatchEvent(new CustomEvent('qualitychange', { bubbles: true }))
+        })
+      }
+
+      if (this.value) {
+        this.dom.range.value = this.value
+      } else {
+        this.value = 0.5 // set default starting value
+      }
+
+      this.updateSlider()
+    }
+
+    updateSlider() {
+      const distance = this.dom.range.value / this.dom.range.max
+      const offset = (this.dom.thumb.offsetWidth / this.dom.slider.offsetWidth) * distance
+      const position = ((distance - offset) * 100).toFixed(1)
+
+      this.dom.thumb.style.insetInlineStart = position + '%'
+
+      const supportsInsetInlineStart = 'insetInlineStart' in document.documentElement.style
+      if (!supportsInsetInlineStart) {
+        this.dom.thumb.style.left = position + '%'
+      }
+    }
+  }
+
+  if (!customElements.get('quality-slider')) {
+    customElements.define('quality-slider', QualitySlider)
+  }
+</script>

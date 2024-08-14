@@ -1,0 +1,4 @@
+/* @link https://piccalil.li/blog/flow-utility */
+.flow > * + * {
+  margin-block-start: var(--flow-space, 1em);
+}

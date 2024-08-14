@@ -1,0 +1,4 @@
+image-compare {
+  --focus-width: var(--fluid-4-6, 6px);
+  --focus-color: var(--color-primary);
+}

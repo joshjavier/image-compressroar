@@ -1,0 +1,160 @@
+---
+layout: 'layouts/base.webc'
+---
+<div id="app">
+  <drop-zone></drop-zone>
+
+  <header>
+    <h1>Image Compressroar</h1>
+  </header>
+
+  <main class="with-sidebar">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <image-queue></image-queue>
+    </div>
+
+    <!-- Main panel -->
+    <div class="main-panel">
+
+      <!-- Options bar -->
+      <div class="options-bar cluster">
+        <quality-slider></quality-slider>
+        <preview-toggle></preview-toggle>
+      </div>
+
+      <!-- Image preview -->
+      <div class="full-image cover bleed">
+        <div class="center">
+          <image-preview></image-preview>
+          <div class="hint flow">
+            <p>Drag and drop your images to get started</p>
+            <p>Or, <filepicker-toggle type="link" label="browse to select"></filepicker-toggle></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- <footer></footer> -->
+</div>
+
+<style>
+  #app {
+    --header-size: 60px;
+    --sidebar-width: 30rem;
+
+    > header {
+      padding: 10px;
+      height: var(--header-size);
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--color-light-mod-2);
+
+      & * { margin: 0; }
+
+      & h1 {
+        font-size: var(--step-1);
+        text-transform: uppercase;
+        font-stretch: semi-condensed;
+      }
+    }
+
+    > main {
+      height: calc(100vh - var(--header-size));
+
+      > .sidebar {
+        border-right: 1px solid var(--color-light-mod-2);
+        height: 100%; /* we need to set an explicit height to make the `<image-queue>` scrollable items overflow */
+      }
+
+      > .main-panel {
+        height: 100%; /* we need to set an explicit height to make the `.full-image` div scrollable for large images */
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    & .options-bar {
+      border-bottom: 1px solid var(--color-light-mod-2);
+      padding: var(--space-2xs);
+      justify-content: space-between;
+    }
+
+    & .full-image {
+      height: 100%;
+      overflow-y: auto;
+      background-color: var(--canvas-color, var(--color-dark));
+      color: var(--color-light);
+    }
+
+    & image-preview[loaded] + .hint {
+      display: none; /* only display hint if there's no image loaded */
+    }
+
+    .hint {
+      opacity: 0.4;
+      text-align: center;
+      transform: translateY(-10px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      > :first-child {
+        margin: 0;
+        text-wrap: balance;
+        font-size: var(--step-3);
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.5px;
+        text-transform: uppercase;
+      }
+    }
+  }
+</style>
+
+<script webc:bucket="defer">
+  const imagePreview = document.querySelector('image-preview')
+  const imageQueue = document.querySelector('image-queue')
+  const previewToggle = document.querySelector('preview-toggle')
+  const qualitySlider = document.querySelector('quality-slider')
+
+  document.addEventListener('filedrop', (e) => {
+    imageQueue.add(e.detail.files)
+  })
+
+  document.addEventListener('cardselect', (e) => {
+    const original = e.target.data.image.src
+    const compressed = e.target.data.compressed.url
+    imagePreview.sources = [original, compressed]
+    qualitySlider.value = e.target.quality
+  })
+
+  document.addEventListener('queueclear', () => {
+    imagePreview.sources = ['', '']
+  })
+
+  document.addEventListener('previewtoggle', (e) => {
+    imagePreview.mode = e.target.value
+  })
+
+  document.addEventListener('qualitychange', debounce(
+    function (e) {
+      const current = document.querySelector('[aria-current="true"]')
+
+      if (!current) return // don't do anything if no card is selected
+
+      current.quality = e.target.value
+      current.addEventListener('imagecompress', (e) => {
+        const newCurrent = document.querySelector('[aria-current="true"]')
+
+        // if the user didn't select a new card, update the image preview
+        if (current === newCurrent) {
+          current.dom.button.click()
+        }
+      }, { once: true })
+    },
+    500 // wait 500ms before compressing the image to improve performance
+  ))
+</script>
