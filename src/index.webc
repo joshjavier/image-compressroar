@@ -5,7 +5,12 @@ layout: 'layouts/base.webc'
   <drop-zone></drop-zone>
 
   <header>
-    <h1>Image Compressroar</h1>
+    <h1>
+      <a href="/">
+        <span class="visually-hidden">Image Compressroar</span>
+        <svg-logo aria-hidden="true" focusable="false" height="100%"></svg-logo>
+      </a>
+    </h1>
   </header>
 
   <main class="with-sidebar">
@@ -42,7 +47,7 @@ layout: 'layouts/base.webc'
 
 <style>
   #app {
-    --header-size: 60px;
+    --header-size: 80px;
     --sidebar-width: 30rem;
 
     > header {
@@ -58,6 +63,12 @@ layout: 'layouts/base.webc'
         font-size: var(--step-1);
         text-transform: uppercase;
         font-stretch: semi-condensed;
+        height: 100%;
+      }
+
+      & a[href="/"] {
+        display: block;
+        height: 100%;
       }
     }
 
