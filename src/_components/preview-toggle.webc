@@ -1,0 +1,123 @@
+<form>
+  <fieldset role="radiogroup">
+    <legend class="visually-hidden">Preview mode</legend>
+    <div class="cluster">
+      <div aria-hidden="true">Preview mode:</div>
+      <div class="options cluster">
+        <div class="field">
+          <input id="slider" type="radio" name="preview" value="slider">
+          <label for="slider" class="btn">Slider</label>
+        </div>
+        <div class="field">
+          <input id="reveal" type="radio" name="preview" value="reveal">
+          <label for="reveal" class="btn">Tap-to-reveal</label>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</form>
+
+<style>
+  preview-toggle {
+    /* remove browser defaults for fieldset */
+    & fieldset {
+      border: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    & .options {
+      --space: 0px; /* remove default gap */
+    }
+
+    & .field {
+      position: relative;
+      line-height: normal;
+
+      /* Visually hide the radio buttons and align them with their labels, now acting as buttons */
+      > input[type="radio"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        z-index: -1;
+
+        &:checked + label {
+          --button-color: var(--color-primary);
+          --text-color: var(--color-light);
+        }
+
+        &:focus-visible + label {
+          outline: var(--fluid-6-9, 9px) double black;
+          box-shadow: 0 0 0 var(--fluid-4-6, 6px) white;
+          z-index: 1;
+          position: relative;
+        }
+      }
+    }
+  }
+</style>
+
+<script webc:bucket="defer">
+  /**
+   * This class defines a custom <preview-toggle> element that allows the user
+   * to switch between two preview modes: slider and tap-to-reveal.
+   *
+   * It fires a "previewtoggle" custom bubbling event whenever the internal
+   * radio button changes value. Ideally, you'll listen to this event in the
+   * root of your app to update the <image-preview> component so its `mode`
+   * reflects the `value` of this element.
+   */
+  class PreviewToggle extends HTMLElement {
+    set value(val) {
+      this.setAttribute('value', val)
+    }
+    get value() {
+      return this.getAttribute('value')
+    }
+
+    static get observedAttributes() {
+      return ['value']
+    }
+    attributeChangedCallback(name, oldVal, newVal) {
+      if (!this.dom) return
+      switch (name) {
+        case 'value':
+          this.updateDOM()
+          break
+      }
+    }
+
+    connectedCallback() {
+      if (!this.value) {
+        this.value = 'slider'
+      }
+
+      this.dom = {
+        form: this.querySelector('form'),
+      }
+
+      this.data = {
+        radiogroup: this.dom.form.elements['preview'],
+      }
+
+      this.addEventListener('change', (e) => {
+        this.value = this.data.radiogroup.value
+        this.dispatchEvent(new CustomEvent('previewtoggle', { bubbles: true }))
+      })
+
+      this.updateDOM()
+    }
+
+    updateDOM() {
+      this.data.radiogroup.value = this.value
+    }
+  }
+
+  if (!customElements.get('preview-toggle')) {
+    customElements.define('preview-toggle', PreviewToggle)
+  }
+</script>

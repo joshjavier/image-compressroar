@@ -1,0 +1,200 @@
+<div class="top">
+  <div class="image-count"></div>
+  <div class="buttons">
+    <filepicker-toggle type="button" label="Add"></filepicker-toggle>
+    <button class="btn clear">
+      <svg class="icon" width="24" height="24" aria-hidden="true" focusable="false">
+        <use href="#icon-trash">
+      </svg>
+      Clear
+    </button>
+  </div>
+</div>
+
+<ul role="list" tabindex="-1"></ul>
+
+<div class="bottom">
+  <div class="error"></div>
+  <button class="btn -primary download bleed">
+    <svg class="icon" width="24" height="24" aria-hidden="true" focusable="false">
+      <use href="#icon-download">
+    </svg>
+    Download
+  </button>
+</div>
+
+<style>
+  image-queue {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    & * { margin: 0; }
+
+    & .top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-2xs);
+      padding: var(--space-2xs);
+      border-bottom: 1px solid var(--color-light-mod-2);
+
+      & :last-child {
+        margin-left: auto;
+      }
+
+      & .clear:hover {
+        --button-color: var(--color-negative);
+        --text-color: var(--color-light);
+      }
+    }
+
+    & .bottom {
+      display: flex;
+      flex-direction: column;
+      margin-top: auto; /* make this section stick to the bottom */
+
+      & .download {
+        font-size: var(--step-2);
+        font-weight: 700;
+        padding: var(--space-s) var(--space-xl);
+      }
+    }
+
+    &:not([activecard]) .download {
+      display: none; /* hide download button when the queue is empty */
+    }
+
+    & ul {
+      padding-inline-start: 0;
+      overflow-y: auto; /* make the list scrollable when items overflow */
+
+      > * + * {
+        border-top: 1px solid var(--color-light-mod-1);
+      }
+    }
+  }
+</style>
+
+<script webc:bucket="defer">
+  class ImageQueue extends HTMLElement {
+    set activecard(val) {
+      if (val === null) {
+        this.removeAttribute('activecard')
+      } else {
+        this.setAttribute('activecard', val)
+      }
+    }
+    get activecard() {
+      return Number(this.getAttribute('activecard'))
+    }
+
+    static get observedAttributes() {
+      return ['activecard']
+    }
+    attributeChangedCallback(name, oldVal, newVal) {
+      if (!this.dom || !this.dom.list.childElementCount) return
+      switch (name) {
+        case 'activecard':
+          this.dom.list.children[Number(oldVal)].firstElementChild.removeAttribute('aria-current')
+          this.dom.list.children[Number(newVal)].firstElementChild.setAttribute('aria-current', 'true')
+          break
+      }
+    }
+
+    connectedCallback() {
+      this.dom = {
+        list: this.querySelector('[role="list"]'),
+        clear: this.querySelector('.btn.clear'),
+        download: this.querySelector('.btn.download'),
+        count: this.querySelector('.image-count'),
+      }
+
+      // Handle clicks on image cards
+      this.addEventListener('cardselect', this)
+
+      // Handle clicks on action buttons
+      this.dom.clear.addEventListener('click', () => this.clear())
+      this.dom.download.addEventListener('click', () => this.download())
+    }
+
+    /**
+     * Generate image cards and append to DOM
+     *
+     * @param {...File|File[]|FileList} files
+     */
+    add(...files) {
+      if (Array.isArray(files[0])) {
+        files = files.flat(Infinity)
+      }
+      if (files[0] instanceof FileList) {
+        files = Array.from(files[0])
+      }
+
+      // Append <li>-wrapped <image-card>s to DOM
+      const listItems = files.map(file => {
+        const imageCard = new ImageCard(file)
+        const li = document.createElement('li')
+        li.appendChild(imageCard)
+        return li
+      })
+      this.dom.list.append(...listItems)
+
+      // Select the first item if no active card yet
+      if (!this.activecard) {
+        const first = this.querySelector('image-card')
+        first.addEventListener('imagecompress', () => {
+          first.dom.button.click()
+        }, { once: true })
+      }
+
+      // Update image count
+      const imageCount = this.dom.list.childElementCount
+      this.dom.count.textContent = `${imageCount} ${imageCount === 1 ? 'image' : 'images'}`
+    }
+
+    clear() {
+      if (!this.dom.list.childElementCount)
+        return // do nothing if there's nothing to clear
+      this.activecard = null
+      this.dom.list.replaceChildren()
+      this.dom.count.replaceChildren()
+      this.dispatchEvent(new CustomEvent('queueclear', { bubbles: true }))
+    }
+
+    download() {
+      if (this.dom.list.childElementCount === 1) {
+        const imagecard = this.dom.list.firstElementChild.firstElementChild
+        const link = document.createElement('a')
+        link.href = imagecard.data.compressed.url
+        link.download = imagecard.data.file.name
+        link.click()
+      } else {
+        const zip = new JSZip()
+        for (const li of this.dom.list.children) {
+          const imageCard = li.firstElementChild
+          zip.file(imageCard.data.file.name, imageCard.data.compressed.blob)
+        }
+        zip.generateAsync({ type: 'blob' }).then(blob => {
+          saveAs(blob, 'compressed.zip')
+        })
+      }
+    }
+
+    handleEvent(e) {
+      if (e.type !== 'cardselect') return
+      const imagecard = e.target
+      this.selectCard(imagecard)
+    }
+
+    selectCard(el) {
+      if (!el) return // do nothing if no card is clicked
+      const cards = Array.from(this.dom.list.children).map(li => li.firstElementChild)
+      this.activecard = cards.indexOf(el)
+    }
+  }
+
+  if (!customElements.get('image-queue')) {
+    customElements.define('image-queue', ImageQueue)
+  }
+</script>

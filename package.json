@@ -10,6 +10,7 @@
   "license": "MIT",
   "devDependencies": {
     "@11ty/eleventy": "3.0.0-alpha.14",
+    "@11ty/eleventy-plugin-webc": "^0.11.2",
     "browserslist": "^4.23.1",
     "esbuild": "0.23.0",
     "lightningcss": "^1.25.1"
@@ -18,5 +19,10 @@
     "last 2 versions",
     "not dead",
     "> 0.2%"
-  ]
+  ],
+  "dependencies": {
+    "@cloudfour/image-compare": "^1.0.5",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1"
+  }
 }

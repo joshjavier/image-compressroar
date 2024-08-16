@@ -1,0 +1,25 @@
+.btn {
+  --button-color: var(--color-light-mod-1);
+  --text-color: var(--color-dark);
+  display: inline-block;
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: var(--space-2xs) var(--space-s);
+  background-color: var(--button-color);
+  color: var(--text-color);
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--button-color), #000 10%);
+    transition: all 0.1s;
+  }
+
+  &.-primary {
+    --button-color: var(--color-primary);
+    --text-color: var(--color-light);
+  }
+
+  & .icon {
+    width: 0.75em;
+    height: 0.75em;
+  }
+}
