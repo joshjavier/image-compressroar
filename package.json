@@ -5,14 +5,18 @@
   "type": "module",
   "scripts": {
     "build": "eleventy",
-    "start": "eleventy --serve --incremental --quiet"
+    "start": "eleventy --serve --incremental --quiet",
+    "lint": "eslint ."
   },
   "license": "MIT",
   "devDependencies": {
     "@11ty/eleventy": "3.0.0-alpha.14",
     "@11ty/eleventy-plugin-webc": "^0.11.2",
+    "@eslint/js": "^9.9.1",
     "browserslist": "^4.23.1",
     "esbuild": "0.23.0",
+    "eslint": "^9.9.1",
+    "globals": "^15.9.0",
     "lightningcss": "^1.25.1"
   },
   "browserslist": [
