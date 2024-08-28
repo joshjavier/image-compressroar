@@ -17,6 +17,7 @@ export default [
       },
     },
     rules: {
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@stylistic/brace-style': ['error', '1tbs'],
     },
   },

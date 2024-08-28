@@ -1,12 +1,14 @@
-import { bytesToSize } from "../_utils.js"
+import { bytesToSize } from '../_utils.js'
 
 export class ImageCard extends HTMLElement {
   set quality(val) {
     this.setAttribute('quality', val)
   }
+
   get quality() {
     return Number(this.getAttribute('quality'))
   }
+
   set valid(val) {
     const isValid = Boolean(val)
     if (isValid) {
@@ -15,9 +17,11 @@ export class ImageCard extends HTMLElement {
       this.setAttribute('aria-invalid', 'true')
     }
   }
+
   get valid() {
     return !this.getAttribute('aria-invalid')
   }
+
   set loading(bool) {
     if (bool) {
       const spinner = document.createElement('div')
@@ -29,6 +33,7 @@ export class ImageCard extends HTMLElement {
       this.dom.thumbnail.replaceChildren(this.data.image)
     }
   }
+
   get loading() {
     return this.querySelector('.spinner')
   }
@@ -36,7 +41,8 @@ export class ImageCard extends HTMLElement {
   static get observedAttributes() {
     return ['quality']
   }
-  attributeChangedCallback(name, oldVal, newVal) {
+
+  attributeChangedCallback(name, _oldVal, _newVal) {
     if (!this.dom || !this.data.image) return
     switch (name) {
       case 'quality':
@@ -156,7 +162,6 @@ export class ImageCard extends HTMLElement {
 
       this.data.compressed.url = URL.createObjectURL(this.data.compressed.blob)
       this.dom.sizeCompressed.textContent = bytesToSize(this.data.compressed.blob.size)
-
     } else {
       const offscreenCanvas = new OffscreenCanvas(this.data.image.naturalWidth, this.data.image.naturalHeight)
       const ctx = offscreenCanvas.getContext('2d')
@@ -197,12 +202,12 @@ export class ImageCard extends HTMLElement {
     }
     console.log(options)
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       worker.onmessage = (e) => {
         resolve(e.data.data)
         worker.terminate()
       }
-      this.data.file.arrayBuffer().then(buf => {
+      this.data.file.arrayBuffer().then((buf) => {
         worker.postMessage({
           file: new Uint8Array(buf),
           options,

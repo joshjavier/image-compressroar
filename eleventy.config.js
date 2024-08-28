@@ -1,11 +1,11 @@
-import pluginWebc from "@11ty/eleventy-plugin-webc"
-import esbuild from "./config/esbuild.js"
-import lightningcss from "./config/lightningcss.js"
-import processBundle from "./config/process-bundle.js"
+import pluginWebc from '@11ty/eleventy-plugin-webc'
+import esbuild from './config/esbuild.js'
+import lightningcss from './config/lightningcss.js'
+import processBundle from './config/process-bundle.js'
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default function (eleventyConfig) {
-  eleventyConfig.addPassthroughCopy({ 'public': '/' })
+  eleventyConfig.addPassthroughCopy({ public: '/' })
 
   eleventyConfig.addPlugin(esbuild)
   eleventyConfig.addPlugin(lightningcss)
@@ -19,7 +19,7 @@ export default function (eleventyConfig) {
   return {
     dir: {
       input: 'src',
-      output: 'dist'
-    }
+      output: 'dist',
+    },
   }
 }

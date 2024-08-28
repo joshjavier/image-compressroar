@@ -13,7 +13,7 @@
  */
 export function bytesToSize(
   bytes,
-  { precision = 1, threshold = 100} = {},
+  { precision = 1, threshold = 100 } = {},
 ) {
   const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
   let l = 0, n = parseInt(bytes, 10) || 0
