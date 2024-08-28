@@ -1,6 +1,6 @@
-import browserslist from "browserslist"
-import { transform as cssTransform, browserslistToTargets } from "lightningcss"
-import { transform as jsTransform } from "esbuild"
+import browserslist from 'browserslist'
+import { transform as cssTransform, browserslistToTargets } from 'lightningcss'
+import { transform as jsTransform } from 'esbuild'
 
 const targets = browserslistToTargets(browserslist())
 

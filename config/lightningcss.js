@@ -1,6 +1,6 @@
-import path from "node:path"
-import browserslist from "browserslist"
-import { bundleAsync, browserslistToTargets } from "lightningcss"
+import path from 'node:path'
+import browserslist from 'browserslist'
+import { bundleAsync, browserslistToTargets } from 'lightningcss'
 
 const targets = browserslistToTargets(browserslist())
 
@@ -28,8 +28,8 @@ export default function (eleventyConfig) {
             const importPath = path.resolve(path.dirname(from), specifier)
             imports.push(importPath)
             return importPath
-          }
-        }
+          },
+        },
       })
 
       // Register imports as dependencies for incremental builds
@@ -38,6 +38,6 @@ export default function (eleventyConfig) {
       return async () => {
         return result.code.toString()
       }
-    }
+    },
   })
 }

@@ -2,12 +2,15 @@ class FilePickerToggle extends HTMLElement {
   set type(val) {
     this.setAttribute('type', val)
   }
+
   get type() {
     return this.getAttribute('type')
   }
+
   set label(val) {
     this.setAttribute('label', val)
   }
+
   get label() {
     return this.getAttribute('label')
   }
