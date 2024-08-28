@@ -1,11 +1,11 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
-
-// console.log(pluginJs.configs.recommended)
+import globals from 'globals'
+import pluginJs from '@eslint/js'
+import stylistic from '@stylistic/eslint-plugin'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   pluginJs.configs.recommended,
+  stylistic.configs['recommended-flat'],
 
   { ignores: ['dist'] },
   {
@@ -15,5 +15,8 @@ export default [
         ...globals.node,
       },
     },
+    rules: {
+      '@stylistic/brace-style': ['error', '1tbs'],
+    },
   },
-];
+]
