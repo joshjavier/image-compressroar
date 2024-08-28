@@ -1,8 +1,19 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 
+// console.log(pluginJs.configs.recommended)
 
+/** @type {import('eslint').Linter.Config[]} */
 export default [
-  {languageOptions: { globals: {...globals.browser, ...globals.node} }},
   pluginJs.configs.recommended,
+
+  { ignores: ['dist'] },
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+  },
 ];
