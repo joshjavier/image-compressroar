@@ -111,6 +111,15 @@ To get a local copy up and running follow these simple example steps.
    npm start
    ```
 
+### Deployment
+
+Deployments are managed by Netlify and are triggered when pull requests are merged to the `main` (production) and `develop` (staging) branches.
+
+- `develop` is automatically deployed to `develop--compressroar.netlify.app`
+- `main` is auto-deployed to `compressroar.netlify.app`
+
+Also, Netlify automatically generates deploy previews when creating or updating pull requests to the `main` and `develop` branches. This is useful for quickly testing functionality when reviewing PRs.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
