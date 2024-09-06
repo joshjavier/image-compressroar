@@ -7,15 +7,8 @@
 <br />
 <div align="center">
   <a href="https://github.com/joshjavier/image-compressroar">
-    <img src="public/logo.svg" alt="Logo" width="300">
+    <img src="public/logo.svg" alt="Compressroar" width="300">
   </a>
-
-  <h3
-    align="center"
-    style="border: 0; clip: rect(0 0 0 0); clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; white-space: nowrap; width: 1px;"
-  >
-    Compressroar
-  </h3>
 
   <p align="center">
     Quickly compress images under 100 KB
