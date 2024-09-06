@@ -10,7 +10,12 @@
     <img src="public/logo.svg" alt="Logo" width="300">
   </a>
 
-<h3 align="center">Compressroar</h3>
+  <h3
+    align="center"
+    style="border: 0; clip: rect(0 0 0 0); clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; white-space: nowrap; width: 1px;"
+  >
+    Compressroar
+  </h3>
 
   <p align="center">
     Quickly compress images under 100 KB
@@ -35,6 +40,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
+        <li><a href="#motivation">Motivation</a></li>
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
@@ -43,14 +49,15 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#deployment">Deployment</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
+    <!-- <li><a href="#usage">Usage</a></li> -->
+    <!-- <li><a href="#roadmap">Roadmap</a></li> -->
+    <!-- <li><a href="#contributing">Contributing</a></li> -->
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <!-- <li><a href="#contact">Contact</a></li> -->
+    <!-- <li><a href="#acknowledgments">Acknowledgments</a></li> -->
   </ol>
 </details>
 
@@ -65,7 +72,22 @@
 </a>
 <br>
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+Compressroar is a side-project of the BetMGM Manila CMS Team to help streamline the design process when preparing assets for production.
+
+### Motivation
+
+> Or, *Why Another Image Compressor?*
+
+There are already a number of free image compressors online, but these tools often send data to external servers, which is not ideal from a security standpoint.
+
+Also, many of these free tools don't allow designers to fine-tune the level of compression needed for each individual image.
+
+Compressroar aims to solve these problems by providing the following features:
+
+- 🖼️ **Image compression** (currently supports JPG and PNG files)
+- 🎚️ **Quality slider** for adjusting compression level
+- ✔️ **Validation icons** to easily spot images over 100 KB
+- 🔒 **All work is done in the browser,** so no data is sent to a server!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -83,8 +105,9 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Compressroar is a single-page app built with vanilla JavaScript (no framework). We use Eleventy to generate the static files, which are hosted on Netlify.
+
+To get a local copy up and running, follow these steps:
 
 ### Prerequisites
 
@@ -96,17 +119,13 @@ To get a local copy up and running follow these simple example steps.
 1. Clone the repo
    ```sh
    git clone https://github.com/joshjavier/image-compressroar.git
+   cd image-compressroar
    ```
 2. Install NPM packages
    ```sh
    npm install
    ```
-3. Change git remote url to avoid accidental pushes to base project
-   ```sh
-   git remote set-url origin github_username/compressroar # replace `github_username` with your github username
-   git remote -v # confirm the changes
-   ```
-4. Run Eleventy Dev Server
+3. Run Eleventy Dev Server
    ```sh
    npm start
    ```
@@ -125,32 +144,31 @@ Also, Netlify automatically generates deploy previews when creating or updating 
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
+<!-- ## Usage
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 
 
 <!-- ROADMAP -->
-## Roadmap
+<!-- ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [ ] Compute the optimal quality for each image
+- [ ] Skip compressing images that are already under 100 KB
+- [ ] Dark mode
 
 See the [open issues](https://github.com/joshjavier/image-compressroar/issues) for a full list of proposed features (and known issues).
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 
 
 <!-- CONTRIBUTING -->
-## Contributing
+<!-- ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -169,7 +187,7 @@ Don't forget to give the project a star! Thanks again!
 
 <a href="https://github.com/joshjavier/image-compressroar/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=joshjavier/image-compressroar" alt="contrib.rocks image" />
-</a>
+</a> -->
 
 
 
@@ -183,24 +201,24 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 
 <!-- CONTACT -->
-## Contact
+<!-- ## Contact
 
 Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
 
 Project Link: [https://github.com/joshjavier/image-compressroar](https://github.com/joshjavier/image-compressroar)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 
 
 <!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+<!-- ## Acknowledgments
 
 * []()
 * []()
 * []()
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 
 
