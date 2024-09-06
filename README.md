@@ -25,9 +25,9 @@
     <br />
     <a href="https://compressroar.netlify.app/">View App</a>
     ·
-    <a href="https://github.com/joshjavier/image-compressroar/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/joshjavier/image-compressroar/issues/new?labels=bug&template=bug-report-%F0%9F%90%9E.md">Report Bug</a>
     ·
-    <a href="https://github.com/joshjavier/image-compressroar/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/joshjavier/image-compressroar/issues/new?labels=enhancement&template=feature-request-%F0%9F%9A%80.md">Request Feature</a>
   </p>
 </div>
 
