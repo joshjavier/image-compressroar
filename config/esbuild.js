@@ -1,5 +1,5 @@
-import path from "node:path"
-import { build } from "esbuild"
+import path from 'node:path'
+import { build } from 'esbuild'
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default function (eleventyConfig) {
@@ -23,7 +23,7 @@ export default function (eleventyConfig) {
         format: 'esm',
         minify: true,
         metafile: true,
-        write: false
+        write: false,
       })
 
       let files = []
@@ -43,6 +43,6 @@ export default function (eleventyConfig) {
       return async () => {
         return result.outputFiles[0].text
       }
-    }
+    },
   })
 }

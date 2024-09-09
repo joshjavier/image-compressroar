@@ -6,8 +6,8 @@ import { ImageCard } from './_components/image-card.js'
 
 // Import functions
 import JSZip from 'jszip'
-import { saveAs } from "file-saver"
-import { debounce } from "./_utils.js"
+import { saveAs } from 'file-saver'
+import { debounce } from './_utils.js'
 
 // Make imports accessible in global scope
 window.JSZip = JSZip

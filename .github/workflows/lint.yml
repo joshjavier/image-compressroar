@@ -1,0 +1,16 @@
+name: Lint
+
+on:
+  push:
+    paths:
+      - '**.js'
+
+jobs:
+  lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Check `.js` files
+        run: npm run lint
