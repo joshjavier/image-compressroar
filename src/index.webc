@@ -11,6 +11,11 @@ layout: 'layouts/base.webc'
         <svg-logo aria-hidden="true" focusable="false" height="100%"></svg-logo>
       </a>
     </h1>
+
+    <!-- Link to File Size Checker -->
+    <a href="/file-size-checker.html" target="_blank" class="file-size-checker">
+      <span class="button_top">✨ File Size Checker</span>
+    </a>
   </header>
 
   <main class="with-sidebar">
@@ -55,6 +60,7 @@ layout: 'layouts/base.webc'
       height: var(--header-size);
       display: flex;
       align-items: center;
+      justify-content: space-between;
       border-bottom: 1px solid var(--color-light-mod-2);
 
       & * { margin: 0; }
@@ -122,6 +128,43 @@ layout: 'layouts/base.webc'
         text-transform: uppercase;
       }
     }
+  }
+
+  .file-size-checker {
+    /* Variables */
+    --button_radius: 0.75em;
+    --button_color: #e8e8e8;
+    --button_outline_color: #000000;
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--button_radius);
+    background: var(--button_outline_color);
+    text-decoration: none;
+  }
+
+  .button_top {
+    display: block;
+    box-sizing: border-box;
+    border: 2px solid var(--button_outline_color);
+    border-radius: var(--button_radius);
+    padding: 0.75em 1.5em;
+    padding-top: 0.8em; /* optical adjustment */
+    background: var(--button_color);
+    color: var(--button_outline_color);
+    transform: translateY(-0.2em);
+    transition: transform 0.1s ease;
+  }
+
+  .file-size-checker:hover .button_top {
+    /* Pull the button upwards when hovered */
+    transform: translateY(-0.33em);
+  }
+
+  .file-size-checker:active .button_top {
+    /* Push the button downwards when pressed */
+    transform: translateY(0);
   }
 </style>
 
