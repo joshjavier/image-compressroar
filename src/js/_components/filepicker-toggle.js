@@ -1,3 +1,24 @@
+/**
+ * The FilePickerToggle renders a visible button (or link) that, when clicked,
+ * programmatically opens a hidden `<input type="file">`. Any files the user
+ * selects are forwarded to an associated `<drop-zone>` element by delegating
+ * the input's `change` event directly to the drop-zone's `handleEvent` method.
+ *
+ * Attributes:
+ *   type  - "button" (default) renders a `.btn` with an add icon;
+ *           "link" renders a plain `.link` without an icon.
+ *   label - Text content of the rendered button/link.
+ *   for   - Optional. ID of the `<drop-zone>` to forward file selections to.
+ *           Defaults to the first `<drop-zone>` found in the document.
+ *
+ * @example
+ * // Render a button that forwards files to the nearest <drop-zone>
+ * <filepicker-toggle type="button" label="Add"></filepicker-toggle>
+ *
+ * @example
+ * // Render an inline link associated with a specific drop zone
+ * <filepicker-toggle type="link" label="browse to select" for="my-dropzone"></filepicker-toggle>
+ */
 class FilePickerToggle extends HTMLElement {
   set type(val) {
     this.setAttribute('type', val)
