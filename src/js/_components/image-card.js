@@ -1,5 +1,34 @@
 import { bytesToSize } from '../_utils.js'
 
+/**
+ * ImageCard represents a single image in the queue. It owns the full lifecycle
+ * of one image: loading the file into memory, compressing it, displaying a
+ * thumbnail with size info, and emitting events so the rest of the app can
+ * react.
+ *
+ * Attributes:
+ *   quality      - Compression quality as a decimal between 0 and 1 (default: 0.5).
+ *                  Changing this attribute while the card is connected triggers
+ *                  a new compression pass automatically.
+ *   aria-invalid - Present (value "true") when the compressed file is >= 100 KB;
+ *                  absent when the image passes validation. Drives the
+ *                  success/failure icon display via CSS.
+ *
+ * Fires:
+ *   cardselect   - Bubbles. Dispatched when the user clicks/taps the card (tap
+ *                  must complete in under 200 ms and the card must not be
+ *                  loading). Signals `<image-queue>` and `index.webc` to update
+ *                  the active selection and image preview.
+ *   imagecompress - Bubbles. Dispatched after each compression pass completes.
+ *                   `event.detail = { original: string, compressed: string }`
+ *                   where both values are object URLs.
+ *
+ * Internal state (`this.data`):
+ *   file       - The original `File` object passed to the constructor.
+ *   image      - An `HTMLImageElement` loaded from the file (DataURL).
+ *   compressed - `{ blob: Blob|null, url: string|null }` — the most recent
+ *                compressed output.
+ */
 export class ImageCard extends HTMLElement {
   set quality(val) {
     this.setAttribute('quality', val)
@@ -51,6 +80,11 @@ export class ImageCard extends HTMLElement {
     }
   }
 
+  /**
+   * @param {File} [file] - The image file this card represents. When omitted
+   *   the card renders its shell HTML but skips loading and compression until
+   *   a file is provided via `this.data.file` and `render()` is called manually.
+   */
   constructor(file) {
     super()
     this.data = {
@@ -152,6 +186,18 @@ export class ImageCard extends HTMLElement {
     this.compressImage()
   }
 
+  /**
+   * Compresses `this.data.image` at the current `quality` level and stores the
+   * result in `this.data.compressed`.
+   *
+   * - PNG files are routed through `optimizePNG()`, which delegates to the
+   *   pngquant Web Worker.
+   * - All other formats (JPEG, WebP) use `OffscreenCanvas.convertToBlob()`.
+   *
+   * Sets `this.loading` around the async work, updates the compressed-size
+   * display, validates the result against the 100 KB threshold, then fires
+   * `imagecompress`.
+   */
   async compressImage() {
     this.loading = true // start compression
 
@@ -191,6 +237,15 @@ export class ImageCard extends HTMLElement {
     }))
   }
 
+  /**
+   * Compresses a PNG by spawning a Web Worker (`/js/worker.js`) that runs
+   * pngquant. The quality range passed to pngquant is ±15 around the current
+   * quality percentage, clamped to [0, 100].
+   *
+   * The worker is terminated immediately after it responds.
+   *
+   * @returns {Promise<Uint8Array>} The raw bytes of the compressed PNG.
+   */
   optimizePNG() {
     const worker = new Worker('/js/worker.js')
     const quality = Math.round(this.quality * 100)
